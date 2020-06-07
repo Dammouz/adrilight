@@ -4,7 +4,7 @@
       <vm:ViewModelLocator xmlns:vm="clr-namespace:adrilight"
                            x:Key="Locator" />
   </Application.Resources>
-  
+
   In the View:
   DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}"
 
@@ -12,10 +12,10 @@
   See http://www.galasoft.ch/mvvm
 */
 
+using System;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Ninject;
-using System;
 
 namespace adrilight.ViewModel
 {
@@ -25,32 +25,35 @@ namespace adrilight.ViewModel
     /// </summary>
     internal class ViewModelLocator
     {
-        private readonly IKernel kernel;
+        private readonly IKernel _kernel;
 
         public ViewModelLocator()
         {
             if (!ViewModelBase.IsInDesignModeStatic)
+            {
                 throw new InvalidOperationException("the parameter-less constructor of ViewModelLocator is expected to only ever be called in design time!");
+            }
 
-            this.kernel = App.SetupDependencyInjection(true);
+            _kernel = App.SetupDependencyInjection(true);
 
         }
+
         /// <summary>
         /// Initializes a new instance of the ViewModelLocator class.
         /// </summary>
         public ViewModelLocator(IKernel kernel)
         {
-            this.kernel = kernel ?? throw new System.ArgumentNullException(nameof(kernel));
+            _kernel = kernel ?? throw new ArgumentNullException(nameof(kernel));
         }
 
         public SettingsViewModel SettingsViewModel
         {
             get
             {
-                return kernel.Get<SettingsViewModel>();
+                return _kernel.Get<SettingsViewModel>();
             }
         }
-        
+
         public static void Cleanup()
         {
             // TODO Clear the ViewModels

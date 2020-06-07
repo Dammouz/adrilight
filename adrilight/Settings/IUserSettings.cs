@@ -1,6 +1,6 @@
-﻿using adrilight.Settings;
-using System;
+﻿using System;
 using System.ComponentModel;
+using adrilight.Settings;
 
 namespace adrilight
 {

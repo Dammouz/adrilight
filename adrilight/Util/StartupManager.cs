@@ -1,6 +1,6 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Security.Principal;
+using Microsoft.Win32;
 
 public class StartUpManager
 {
@@ -10,7 +10,7 @@ public class StartUpManager
     {
         using (RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
         {
-            key.SetValue(ApplicationName, "\"" + System.Reflection.Assembly.GetExecutingAssembly().Location + "\"");
+            key.SetValue(ApplicationName, $"\"{System.Reflection.Assembly.GetExecutingAssembly().Location}\"");
         }
     }
 
@@ -18,7 +18,7 @@ public class StartUpManager
     {
         using (RegistryKey key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
         {
-            key.SetValue(ApplicationName, "\"" + System.Reflection.Assembly.GetExecutingAssembly().Location + "\"");
+            key.SetValue(ApplicationName, $"\"{System.Reflection.Assembly.GetExecutingAssembly().Location}\"");
         }
     }
 
@@ -40,13 +40,13 @@ public class StartUpManager
 
     public static bool IsUserAdministrator()
     {
-        //bool value to hold our return value
+        // Bool value to hold our return value
         bool isAdmin;
         try
         {
-            //get the currently logged in user
-            WindowsIdentity user = WindowsIdentity.GetCurrent();
-            WindowsPrincipal principal = new WindowsPrincipal(user);
+            // Get the currently logged in user
+            var user = WindowsIdentity.GetCurrent();
+            var principal = new WindowsPrincipal(user);
             isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
         catch (UnauthorizedAccessException)

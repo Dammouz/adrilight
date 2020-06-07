@@ -1,13 +1,13 @@
-﻿using adrilight.DesktopDuplication;
-using adrilight.Extensions;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using adrilight.DesktopDuplication;
+using adrilight.Extensions;
 using MoreLinq;
+using NLog;
 
 namespace adrilight
 {
@@ -61,7 +61,6 @@ namespace adrilight
 
         private IUserSettings UserSettings { get; }
 
-
         private void Refresh()
         {
             lock (Lock)
@@ -72,44 +71,50 @@ namespace adrilight
 
         internal static IEnumerable<(int x, int y)> BoundsWalker(int horizontalStripCount, int verticalStripCount)
         {
-            if (horizontalStripCount < 1) throw new ArgumentOutOfRangeException(nameof(horizontalStripCount));
-            if (verticalStripCount < 1) throw new ArgumentOutOfRangeException(nameof(verticalStripCount));
+            if (horizontalStripCount < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(horizontalStripCount));
+            }
+            if (verticalStripCount < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(verticalStripCount));
+            }
 
             /* counting direction is clockwise:
-             * 
+             *
              *    0123
              *    9  4
              *    8765
-             * 
+             *
              * number of expected entries = 2*horizontalStripCount + 2*verticalStripCount
-             * 
-             * ranges are 
+             *
+             * ranges are
              * 1..horizontalStripCount, 0  = top
              * horizontalStripCount+1, 1..verticalStripCount  = right
              * horizontalStripCount..1, verticalStripCount+1  = bottom
              * 0, verticalStripCount..1)  = left
              */
 
-             //top
-            for (int x = 1; x <= horizontalStripCount; x++)
+            // Top
+            for (var x = 1; x <= horizontalStripCount; x++)
             {
                 yield return (x, 0);
             }
 
-            //right
-            for (int y = 1; y <= verticalStripCount; y++)
+            // Right
+            for (var y = 1; y <= verticalStripCount; y++)
             {
                 yield return (horizontalStripCount + 1, y);
             }
 
-            //bottom
-            for (int x = horizontalStripCount; x >= 1; x--)
+            // Bottom
+            for (var x = horizontalStripCount; x >= 1; x--)
             {
-                yield return (x, verticalStripCount+1);
+                yield return (x, verticalStripCount + 1);
             }
 
-            //left
-            for (int y = verticalStripCount; y >=1; y--)
+            // Left
+            for (var y = verticalStripCount; y >= 1; y--)
             {
                 yield return (0, y);
             }
@@ -129,35 +134,35 @@ namespace adrilight
             //var counter = 0;
             //var relationIndex = spotsX - spotsY + 1;
 
-            var interSpotGapX = (screenWidth - 2 * borderDistanceX - (spotsX+2) * spotWidth)*1.0/(spotsX+2-1);
-            var interSpotGapY = (screenHeight- 2 * borderDistanceY - (spotsY+2) * spotHeight)*1.0/(spotsY+2-1);
+            var interSpotGapX = (screenWidth - 2 * borderDistanceX - (spotsX + 2) * spotWidth) * 1.0 / (spotsX + 2 - 1);
+            var interSpotGapY = (screenHeight - 2 * borderDistanceY - (spotsY + 2) * spotHeight) * 1.0 / (spotsY + 2 - 1);
 
             ISpot[] spots = BoundsWalker(spotsX, spotsY)
                 .Select(p =>
                 {
-                    //left row
+                    // Left row
                     var left = 0;
                     if (p.x == spotsX + 1)
                     {
-                        //right row
+                        // Right row
                         left = screenWidth - borderDistanceX - spotWidth;
                     }
                     else
                     {
-                        //top/bottom row
+                        // Top / bottom row
                         left = borderDistanceX + (p.x) * spotWidth + (int)((p.x) * interSpotGapX);
                     }
 
-                    //top row
+                    // Top row
                     var top = 0;
                     if (p.y == spotsY + 1)
                     {
-                        //bottom row
+                        // Bottom row
                         top = screenHeight - borderDistanceY - spotHeight;
                     }
                     else
                     {
-                        //left/right row
+                        // Left / right row
                         top = borderDistanceY + (p.y) * spotHeight + (int)((p.y) * interSpotGapY);
                     }
 
@@ -172,14 +177,18 @@ namespace adrilight
 
             if (userSettings.OffsetLed != 0)
             {
-                spots = Enumerable.Concat(
-                        spots.TakeLast(userSettings.OffsetLed),
-                        spots.Take(spots.Length - userSettings.OffsetLed)
-                    )
+                spots = Enumerable.Concat(spots.TakeLast(userSettings.OffsetLed),
+                        spots.Take(spots.Length - userSettings.OffsetLed))
                     .ToArray();
             }
-            if (spotsY > 1 && userSettings.MirrorX) MirrorX(spots, spotsX, spotsY+2);
-            if (spotsX > 1 && userSettings.MirrorY) MirrorY(spots, spotsX, spotsY+2);
+            if (spotsY > 1 && userSettings.MirrorX)
+            {
+                MirrorX(spots, spotsX, spotsY + 2);
+            }
+            if (spotsX > 1 && userSettings.MirrorY)
+            {
+                MirrorY(spots, spotsX, spotsY + 2);
+            }
 
             spots[0].IsFirst = true;
             return spots;
@@ -187,7 +196,7 @@ namespace adrilight
 
         private static void Mirror(ISpot[] spots, int startIndex, int length)
         {
-            var halfLength = (length/2);
+            var halfLength = (length / 2);
             var endIndex = startIndex + length - 1;
 
             for (var i = 0; i < halfLength; i++)
@@ -198,7 +207,7 @@ namespace adrilight
 
         private static void MirrorX(ISpot[] spots, int spotsX, int spotsY)
         {
-            // copy swap last row to first row inverse
+            // Copy swap last row to first row inverse
             for (var i = 0; i < spotsX; i++)
             {
                 var index1 = i;
@@ -206,17 +215,19 @@ namespace adrilight
                 spots.Swap(index1, index2);
             }
 
-            // mirror first column
+            // Mirror first column
             Mirror(spots, spotsX, spotsY - 2);
 
-            // mirror last column
+            // Mirror last column
             if (spotsX > 1)
+            {
                 Mirror(spots, 2 * spotsX + spotsY - 2, spotsY - 2);
+            }
         }
 
         private static void MirrorY(ISpot[] spots, int spotsX, int spotsY)
         {
-            // copy swap last row to first row inverse
+            // Copy swap last row to first row inverse
             for (var i = 0; i < spotsY - 2; i++)
             {
                 var index1 = spotsX + i;
@@ -224,17 +235,19 @@ namespace adrilight
                 spots.Swap(index1, index2);
             }
 
-            // mirror first row
+            // Mirror first row
             Mirror(spots, 0, spotsX);
 
-            // mirror last row
+            // Mirror last row
             if (spotsY > 1)
+            {
                 Mirror(spots, spotsX + spotsY - 2, spotsX);
+            }
         }
 
         private static void Offset(ref ISpot[] spots, int offset)
         {
-           spots = Enumerable.Concat(spots.TakeLast(offset), spots.Take(spots.Length - offset)).ToArray();
+            spots = Enumerable.Concat(spots.TakeLast(offset), spots.Take(spots.Length - offset)).ToArray();
         }
 
         public void IndicateMissingValues()
@@ -245,6 +258,4 @@ namespace adrilight
             }
         }
     }
-
-
 }

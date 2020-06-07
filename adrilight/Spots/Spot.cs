@@ -1,13 +1,13 @@
-﻿using GalaSoft.MvvmLight;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Media;
+using GalaSoft.MvvmLight;
 
 using Color = System.Windows.Media.Color;
 
-namespace adrilight {
-
+namespace adrilight
+{
     [DebuggerDisplay("Spot: Rectangle={Rectangle}, Color={Red},{Green},{Blue}")]
     sealed class Spot : ViewModelBase, IDisposable, ISpot
     {
@@ -20,9 +20,13 @@ namespace adrilight {
         public Rectangle Rectangle { get; private set; }
 
         private bool _isFirst;
-        public bool IsFirst {
+        public bool IsFirst
+        {
             get => _isFirst;
-            set { Set(() => IsFirst, ref _isFirst, value); }
+            set
+            {
+                Set(() => IsFirst, ref _isFirst, value);
+            }
         }
 
         public Color OnDemandColor => Color.FromRgb(Red, Green, Blue);
@@ -46,29 +50,32 @@ namespace adrilight {
             }
         }
 
-        public void Dispose() {
+        public void Dispose()
+        {
         }
 
         private DateTime? _lastMissingValueIndication;
         private readonly double _dimToBlackIntervalInMs = TimeSpan.FromMilliseconds(10000).TotalMilliseconds;
 
-        private float _dimR, _dimG, _dimB;
+        private float _dimR;
+        private float _dimG;
+        private float _dimB;
 
         public void IndicateMissingValue()
         {
-            //this method might be called while another thread is calling setcolor() and we need the local copy to have a fixed value
+            // This method might be called while another thread is calling setcolor() and we need the local copy to have a fixed value
             var localCopyLastMissingValueIndication = _lastMissingValueIndication;
 
             if (!localCopyLastMissingValueIndication.HasValue)
             {
-                //a new period of missing values starts, copy last values
+                // A new period of missing values starts, copy last values
                 _dimR = Red;
                 _dimG = Green;
                 _dimB = Blue;
                 localCopyLastMissingValueIndication = _lastMissingValueIndication = DateTime.UtcNow;
             }
 
-            var dimFactor =(float) (1 - (DateTime.UtcNow - localCopyLastMissingValueIndication.Value).TotalMilliseconds / _dimToBlackIntervalInMs);
+            var dimFactor = (float)(1 - (DateTime.UtcNow - localCopyLastMissingValueIndication.Value).TotalMilliseconds / _dimToBlackIntervalInMs);
             dimFactor = Math.Max(0, Math.Min(1, dimFactor));
 
             SetColor((byte)(dimFactor * _dimR), (byte)(dimFactor * _dimG), (byte)(dimFactor * _dimB), true);

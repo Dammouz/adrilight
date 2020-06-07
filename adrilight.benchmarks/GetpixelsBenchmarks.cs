@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Text;
-using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 
 namespace adrilight.benchmarks
 {
-    public class GetpixelsBenchmarks :IDisposable
+    public class GetpixelsBenchmarks : IDisposable
     {
         public static void Main()
         {
@@ -24,7 +21,7 @@ namespace adrilight.benchmarks
 
         public GetpixelsBenchmarks()
         {
-            _image = (Bitmap) Image.FromFile("sample.jpg");
+            _image = (Bitmap)Image.FromFile("sample.jpg");
             _bitmapData = new BitmapData();
             _image.LockBits(new Rectangle(0, 0, _image.Width, _image.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppRgb, _bitmapData);
         }
@@ -32,28 +29,25 @@ namespace adrilight.benchmarks
         [Benchmark]
         public void GetAverageColorOfRectangularRegionBenchmark()
         {
-            int r, g, b, count;
-            GetAverageColorOfRectangularRegion(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData, out r, out g, out b, out count);
+            GetAverageColorOfRectangularRegion(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData, out int r, out int g, out int b, out int count);
         }
 
         [Benchmark]
         public void GetAverageColorOfRectangularRegionInlinedBenchmark()
         {
-            int r, g, b, count;
-            GetAverageColorOfRectangularRegion2(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData, out r, out g, out b, out count);
+            GetAverageColorOfRectangularRegion2(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData, out int r, out int g, out int b, out int count);
         }
 
         [Benchmark]
         public void GetAverageColorOfRectangularRegionInlinedReducedLocalVarsBenchmark()
         {
-            int r, g, b, count;
-            GetAverageColorOfRectangularRegion2_5(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData, out r, out g, out b, out count);
+            GetAverageColorOfRectangularRegion2_5(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData, out int r, out int g, out int b, out int count);
         }
+
         [Benchmark]
         public void GetAverageColorOfRectangularRegionRunningPointerBenchmark()
         {
-            int r, g, b, count;
-            GetAverageColorOfRectangularRegion3(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData, out r, out g, out b, out count);
+            GetAverageColorOfRectangularRegion3(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData, out int r, out int g, out int b, out int count);
         }
 
         public void Dispose()
@@ -61,8 +55,6 @@ namespace adrilight.benchmarks
             _image?.Dispose();
             _image = null;
         }
-
-
 
         public static void GetAverageColorOfRectangularRegion(Rectangle spotRectangle, int stepy, int stepx, BitmapData bitmapData, out int sumR, out int sumG, out int sumB, out int count)
         {
@@ -74,11 +66,7 @@ namespace adrilight.benchmarks
             {
                 for (var x = spotRectangle.Left; x < spotRectangle.Right; x += stepx)
                 {
-                    byte r;
-                    byte g;
-                    byte b;
-
-                    GetColor(bitmapData, y, x, out r, out g, out b);
+                    GetColor(bitmapData, y, x, out byte r, out byte g, out byte b);
 
                     sumR += r;
                     sumG += g;
@@ -117,6 +105,7 @@ namespace adrilight.benchmarks
                 }
             }
         }
+
         public unsafe static void GetAverageColorOfRectangularRegion2_5(Rectangle spotRectangle, int stepy, int stepx, BitmapData bitmapData, out int sumR, out int sumG, out int sumB, out int count)
         {
             sumR = 0;
@@ -137,6 +126,7 @@ namespace adrilight.benchmarks
                 }
             }
         }
+
         public unsafe static void GetAverageColorOfRectangularRegion3(Rectangle spotRectangle, int stepy, int stepx, BitmapData bitmapData, out int sumR, out int sumG, out int sumB, out int count)
         {
             sumR = 0;
@@ -144,11 +134,11 @@ namespace adrilight.benchmarks
             sumB = 0;
             count = 0;
 
-            var stepCount = spotRectangle.Width/stepx;
-            var stepxTimes4 = stepx*4;
+            var stepCount = spotRectangle.Width / stepx;
+            var stepxTimes4 = stepx * 4;
             for (var y = spotRectangle.Top; y < spotRectangle.Bottom; y += stepy)
             {
-                byte* pointer = (byte*)bitmapData.Scan0 + bitmapData.Stride * y + 4*spotRectangle.Left;
+                byte* pointer = (byte*)bitmapData.Scan0 + bitmapData.Stride * y + 4 * spotRectangle.Left;
                 for (int i = 0; i < stepCount; i++)
                 {
                     sumR += pointer[2];
@@ -157,7 +147,7 @@ namespace adrilight.benchmarks
 
                     pointer += stepxTimes4;
                 }
-                    count+=stepCount;
+                count += stepCount;
             }
         }
 

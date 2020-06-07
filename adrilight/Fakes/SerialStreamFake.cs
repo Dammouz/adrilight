@@ -21,6 +21,5 @@ namespace adrilight.Fakes
         }
 
         public bool IsValid() => true;
-
     }
 }

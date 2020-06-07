@@ -25,7 +25,7 @@ using adrilight.Resources;
 using adrilight.Util;
 
 namespace adrilight
-{   
+{
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
@@ -43,9 +43,9 @@ namespace adrilight
             {
                 var os = Environment.OSVersion;
                 MessageBox.Show($"Your Windows version is not supported by adrilight, sorry!\n\n"
-                    +$"Platform={os.Platform}\nVersion={os.Version}\nService Pack={os.ServicePack}\n\n\n"
-                    +"You should consider upgrading to Windows 10. Adrilight should run on Windows 8 and later but is only actively tested and developed for Windows 10."
-                    , "Your Windows version is too old!", MessageBoxButton.OK);
+                    + $"Platform={os.Platform}\nVersion={os.Version}\nService Pack={os.ServicePack}\n\n\n"
+                    + "You should consider upgrading to Windows 10. Adrilight should run on Windows 8 and later but is only actively tested and developed for Windows 10.",
+                    "Your Windows version is too old!", MessageBoxButton.OK);
 
                 Shutdown();
                 return;
@@ -56,9 +56,9 @@ namespace adrilight
                 _adrilightMutex = new Mutex(true, "adrilight2");
                 if (!_adrilightMutex.WaitOne(TimeSpan.Zero, true))
                 {
-                    //another instance is already running!
-                    MessageBox.Show("There is already an instance of adrilight running. Please start only a single instance at any given time."
-                        , "Adrilight is already running!");
+                    // Another instance is already running!
+                    MessageBox.Show("There is already an instance of adrilight running. Please start only a single instance at any given time.",
+                        "Adrilight is already running!");
                     Shutdown();
                     return;
                 }
@@ -79,15 +79,15 @@ namespace adrilight
             var isNewVersion = VersionNumber != UserSettings.AdrilightVersion;
             if (!IsPrivateBuild && isNewVersion)
             {
-                //place for upgrades of settings between versions
+                // Place for upgrades of settings between versions
                 UserSettings.AdrilightVersion = VersionNumber;
-                if(UserSettings.ConfigFileVersion == 1)
+                if (UserSettings.ConfigFileVersion == 1)
                 {
                     UserSettings.ConfigFileVersion = 2;
 
-                    //convert from weird legacy led matrix width and height to simple strip length!
+                    // Convert from weird legacy led matrix width and height to simple strip length!
                     UserSettings.SpotsX = Math.Max(1, UserSettings.SpotsX);
-                    UserSettings.SpotsY = Math.Max(1, UserSettings.SpotsY-2);
+                    UserSettings.SpotsY = Math.Max(1, UserSettings.SpotsY - 2);
                 }
             }
 
@@ -106,10 +106,9 @@ namespace adrilight
 
         private bool IsSupported()
         {
-            var os = Environment.OSVersion;
-            //src https://stackoverflow.com/questions/2819934/detect-windows-version-in-net/2819974#2819974
+            var os = Environment.OSVersion; // Source: https://stackoverflow.com/questions/2819934/detect-windows-version-in-net/2819974#2819974
 
-            //adrilight supports Win8, Win8.1 and Win10
+            // Adrilight supports Win8, Win8.1 and Win10
             return os.Platform == PlatformID.Win32NT && (os.Version.Major > 6 || os.Version.Major == 6 && os.Version.Minor >= 2);
         }
 
@@ -126,9 +125,9 @@ namespace adrilight
         internal static IKernel SetupDependencyInjection(bool isInDesignMode)
         {
             var kernel = new StandardKernel();
-            if(isInDesignMode)
+            if (isInDesignMode)
             {
-                //setup fakes
+                // Setup fakes
                 kernel.Bind<IUserSettings>().To<UserSettingsFake>().InSingletonScope();
                 kernel.Bind<IContext>().To<ContextFake>().InSingletonScope();
                 kernel.Bind<ISpotSet>().To<SpotSetFake>().InSingletonScope();
@@ -137,7 +136,7 @@ namespace adrilight
             }
             else
             {
-                //setup real implementations
+                // Setup real implementations
                 var settingsManager = new UserSettingsManager();
                 var settings = settingsManager.LoadIfExists() ?? settingsManager.MigrateOrDefault();
                 kernel.Bind<IUserSettings>().ToConstant(settings);
@@ -154,7 +153,7 @@ namespace adrilight
             .BindAllInterfaces());
             kernel.Bind<NightLightDetection>().ToSelf().InSingletonScope();
 
-            //eagerly create required singletons [could be replaced with actual pipeline]
+            // Eagerly create required singletons [could be replaced with actual pipeline]
             var desktopDuplicationReader = kernel.Get<IDesktopDuplicatorReader>();
             var serialStream = kernel.Get<ISerialStream>();
 
@@ -173,7 +172,7 @@ namespace adrilight
             SystemEvents.PowerModeChanged += (s, e) =>
             {
                 _log.Debug("Changing Powermode to {0}", e.Mode);
-                if(e.Mode == PowerModes.Resume)
+                if (e.Mode == PowerModes.Resume)
                 {
                     GC.Collect();
                 }
@@ -207,7 +206,7 @@ namespace adrilight
             }
             else
             {
-                //bring to front?
+                // Bring to front?
                 _mainForm.Focus();
             }
         }
@@ -216,7 +215,7 @@ namespace adrilight
         {
             if (_mainForm == null) return;
 
-            //deregister to avoid memory leak
+            // Deregister to avoid memory leak
             _mainForm.Closed -= MainForm_FormClosed;
             _mainForm = null;
         }
@@ -226,7 +225,7 @@ namespace adrilight
             var icon = new System.Drawing.Icon(Assembly.GetExecutingAssembly().GetManifestResourceStream("adrilight.adrilight_icon.ico"));
             var contextMenu = new System.Windows.Forms.ContextMenu();
             contextMenu.MenuItems.Add(CreateSendingMenuItem());
-            
+
             contextMenu.MenuItems.Add(new System.Windows.Forms.MenuItem("Settings...", (s, e) => OpenSettingsWindow()));
             contextMenu.MenuItems.Add(new System.Windows.Forms.MenuItem("Exit", (s, e) => Shutdown(0)));
 
@@ -238,7 +237,7 @@ namespace adrilight
                 ContextMenu = contextMenu
             };
             notifyIcon.DoubleClick += (s, e) => { OpenSettingsWindow(); };
-            
+
             Exit += (s, e) => notifyIcon.Dispose();
         }
 
@@ -253,10 +252,10 @@ namespace adrilight
                 menuItem.Checked = UserSettings.TransferActive;
             }
 
-            //initial update
+            // Initial update
             UpdateMenuItem();
 
-            //update on changed setting
+            // Update on changed setting
             UserSettings.PropertyChanged += (s, e) => { if (e.PropertyName == nameof(UserSettings.TransferActive)) { UpdateMenuItem(); } };
 
             return menuItem;

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Newtonsoft.Json;
 
 namespace adrilight
 {
@@ -27,7 +27,10 @@ namespace adrilight
 
         public IUserSettings LoadIfExists()
         {
-            if (!File.Exists(JsonFileNameAndPath)) return null;
+            if (!File.Exists(JsonFileNameAndPath))
+            {
+                return null;
+            }
 
             var json = File.ReadAllText(JsonFileNameAndPath);
 
@@ -44,7 +47,10 @@ namespace adrilight
             settings.PropertyChanged += (_, __) => Save(settings);
 
             var legacyPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "adrilight");
-            if (!Directory.Exists(legacyPath)) return settings;
+            if (!Directory.Exists(legacyPath))
+            {
+                return settings;
+            }
 
             var legacyFiles = Directory.GetFiles(legacyPath, "user.config", SearchOption.AllDirectories);
 
@@ -53,11 +59,11 @@ namespace adrilight
                         .OrderByDescending(fi => fi.LastWriteTimeUtc)
                         .FirstOrDefault();
 
-            if(file != null)
+            if (file != null)
             {
                 var xdoc = XDocument.Load(file.FullName);
 
-                //migrate old values
+                // Migrate old values
                 ReadAndApply(xdoc, settings, "SPOTS_X", s => s.SpotsX);
                 ReadAndApply(xdoc, settings, "SPOTS_Y", s => s.SpotsY);
                 ReadAndApply(xdoc, settings, "SPOT_WIDTH", s => s.SpotWidth);
@@ -72,7 +78,7 @@ namespace adrilight
                 ReadAndApply(xdoc, settings, "OFFSET_LED", s => s.OffsetLed);
 
                 ReadAndApply(xdoc, settings, "AUTOSTART", s => s.Autostart);
-                //migrate actual autostart registry stuff as well
+                // Migrate actual autostart registry stuff as well
                 HandleAutostart(settings);
             }
 
@@ -94,8 +100,10 @@ namespace adrilight
         private void ReadAndApply<T>(XDocument xdoc, IUserSettings settings, string settingName, Expression<Func<IUserSettings, T>> targetProperty)
         {
             var content = xdoc.XPathSelectElement($"//setting[@name='{settingName}']/value");
-            if (content == null) return;
-
+            if (content == null)
+            {
+                return;
+            }
 
             var text = content.Value;
             var propertyExpression = (MemberExpression)targetProperty.Body;
@@ -105,22 +113,22 @@ namespace adrilight
 
             if (typeof(T) == typeof(int))
             {
-                //int
+                // Type int
                 targetValue = Convert.ToInt32(text);
             }
             else if (typeof(T) == typeof(byte))
             {
-                //byte
+                // Type byte
                 targetValue = Convert.ToByte(text);
             }
             else if (typeof(T) == typeof(bool))
             {
-                //bool
+                // Type bool
                 targetValue = Convert.ToBoolean(text);
             }
             else if (typeof(T) == typeof(string))
             {
-                //string
+                // Type string
                 targetValue = text;
             }
             else

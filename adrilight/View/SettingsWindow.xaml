@@ -10,11 +10,11 @@
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{StaticResource MaterialDesignFont}"
-        
+
         d:DataContext="{Binding Source={StaticResource Locator}, Path=SettingsViewModel}"
         DataContext="{Binding Source={StaticResource Locator}, Path=SettingsViewModel}"
         Title="{Binding Title}" WindowStartupLocation="CenterScreen" MinWidth="1220" MinHeight="700" d:DesignWidth="1461.241" d:DesignHeight="739.969" Closed="Window_Closed">
@@ -29,7 +29,7 @@
                     <TextBlock Padding="16" Text="{Binding Title}" TextAlignment="Center" />
                 </DockPanel>
             </materialDesign:ColorZone>
-            <ListBox x:Name="DemoItemsListBox" Margin="0 16 0 16"  
+            <ListBox x:Name="DemoItemsListBox" Margin="0 16 0 16"
                              ItemsSource="{Binding SelectableViewParts}"
                              SelectedItem="{Binding SelectedViewPart}">
                 <ListBox.ItemTemplate>

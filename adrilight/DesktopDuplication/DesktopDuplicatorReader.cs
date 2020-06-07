@@ -2,16 +2,16 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using adrilight.DesktopDuplication;
+using System.Windows.Media.Imaging;
 using NLog;
 using Polly;
-using System.Linq;
-using System.Windows.Media.Imaging;
-using adrilight.ViewModel;
-using System.Runtime.InteropServices;
+using adrilight.DesktopDuplication;
 using adrilight.Settings;
+using adrilight.ViewModel;
 
 namespace adrilight
 {
@@ -50,16 +50,15 @@ namespace adrilight
         public RunStateEnum RunState { get; private set; } = RunStateEnum.Stopped;
         private CancellationTokenSource _cancellationTokenSource;
 
-
         private void RefreshCapturingState()
         {
-            var isRunning = _cancellationTokenSource != null && RunState==RunStateEnum.Running;
+            var isRunning = _cancellationTokenSource != null && RunState == RunStateEnum.Running;
             var shouldBeRunning = UserSettings.TransferActive
                     || SettingsViewModel.IsSettingsWindowOpen && SettingsViewModel.IsPreviewTabOpen;
 
             if (isRunning && !shouldBeRunning)
             {
-                //stop it!
+                // Stop it!
                 _log.Debug("stopping the capturing");
                 RunState = RunStateEnum.Stopping;
                 _cancellationTokenSource.Cancel();
@@ -67,7 +66,7 @@ namespace adrilight
             }
             else if (!isRunning && shouldBeRunning)
             {
-                //start it
+                // Start it
                 _log.Debug("starting the capturing");
                 _cancellationTokenSource = new CancellationTokenSource();
                 var thread = new Thread(() => Run(_cancellationTokenSource.Token))
@@ -90,13 +89,13 @@ namespace adrilight
         {
             if (index < 10)
             {
-                //first second
+                // First second
                 return TimeSpan.FromMilliseconds(100);
             }
 
             if (index < 10 + 256)
             {
-                //steps where there is also led dimming
+                // Steps where there is also led dimming
                 SpotSet.IndicateMissingValues();
                 return TimeSpan.FromMilliseconds(5000d / 256);
             }
@@ -107,35 +106,40 @@ namespace adrilight
 
         public async void Run(CancellationToken token)
         {
-            while(RunState == RunStateEnum.Stopping)
+            while (RunState == RunStateEnum.Stopping)
             {
                 await Task.Yield();
             }
 
-            if (RunState != RunStateEnum.Stopped) throw new Exception(nameof(DesktopDuplicatorReader) + " is already running!");
+            if (RunState != RunStateEnum.Stopped)
+            {
+                throw new Exception($"{nameof(DesktopDuplicatorReader)} is already running!");
+            }
 
             RunState = RunStateEnum.Running;
             _log.Debug("Started Desktop Duplication Reader.");
             Bitmap image = null;
             try
             {
-                BitmapData bitmapData = new BitmapData();
+                var bitmapData = new BitmapData();
 
                 while (!token.IsCancellationRequested)
                 {
                     var frameTime = Stopwatch.StartNew();
-                    var context = new Context();
-                    context.Add("image", image);
+                    var context = new Context
+                    {
+                        { "image", image }
+                    };
                     var newImage = _retryPolicy.Execute(c => GetNextFrame(c["image"] as Bitmap), context);
                     TraceFrameDetails(newImage);
                     if (newImage == null)
                     {
-                        //there was a timeout before there was the next frame, simply retry!
+                        // There was a timeout before there was the next frame, simply retry!
                         continue;
                     }
                     image = newImage;
 
-                    bool isPreviewRunning = SettingsViewModel.IsSettingsWindowOpen && SettingsViewModel.IsPreviewTabOpen;
+                    var isPreviewRunning = SettingsViewModel.IsSettingsWindowOpen && SettingsViewModel.IsPreviewTabOpen;
                     if (isPreviewRunning)
                     {
                         SettingsViewModel.SetPreviewImage(image);
@@ -147,27 +151,27 @@ namespace adrilight
 
                         if (image.Width != SpotSet.ExpectedScreenWidth || image.Height != SpotSet.ExpectedScreenHeight)
                         {
-                            //the screen was resized or this is some kind of powersaving state
+                            // The screen was resized or this is some kind of powersaving state
                             SpotSet.IndicateMissingValues();
                             return;
                         }
                         else
                         {
-                            Parallel.ForEach(SpotSet.Spots
-                                , spot =>
+                            Parallel.ForEach(SpotSet.Spots,
+                                spot =>
                                 {
                                     const int numberOfSteps = 15;
-                                    int stepx = Math.Max(1, spot.Rectangle.Width / numberOfSteps);
-                                    int stepy = Math.Max(1, spot.Rectangle.Height / numberOfSteps);
+                                    var stepx = Math.Max(1, spot.Rectangle.Width / numberOfSteps);
+                                    var stepy = Math.Max(1, spot.Rectangle.Height / numberOfSteps);
 
                                     GetAverageColorOfRectangularRegion(spot.Rectangle, stepy, stepx, bitmapData,
-                                        out int sumR, out int sumG, out int sumB, out int count);
+                                        out var sumR, out var sumG, out var sumB, out var count);
 
                                     var countInverse = 1f / count;
 
-                                    ApplyColorCorrections(sumR * countInverse, sumG * countInverse, sumB * countInverse
-                                        , out byte finalR, out byte finalG, out byte finalB, useLinearLighting
-                                        , UserSettings.SaturationTreshold, spot.Red, spot.Green, spot.Blue);
+                                    ApplyColorCorrections(sumR * countInverse, sumG * countInverse, sumB * countInverse,
+                                        out var finalR, out var finalG, out var finalB, useLinearLighting,
+                                        UserSettings.SaturationTreshold, spot.Red, spot.Green, spot.Blue);
 
                                     spot.SetColor(finalR, finalG, finalB, isPreviewRunning);
 
@@ -176,17 +180,17 @@ namespace adrilight
 
                         if (isPreviewRunning)
                         {
-                            //copy all color data to the preview
+                            // Copy all color data to the preview
                             var needsNewArray = SettingsViewModel.PreviewSpots?.Length != SpotSet.Spots.Length;
-                            
+
                             SettingsViewModel.PreviewSpots = SpotSet.Spots;
                         }
                     }
                     image.UnlockBits(bitmapData);
 
-                    int minFrameTimeInMs = 1000 / UserSettings.LimitFps;
+                    var minFrameTimeInMs = 1000 / UserSettings.LimitFps;
                     var elapsedMs = (int)frameTime.ElapsedMilliseconds;
-                    if(elapsedMs < minFrameTimeInMs)
+                    if (elapsedMs < minFrameTimeInMs)
                     {
                         Thread.Sleep(minFrameTimeInMs - elapsedMs);
                     }
@@ -205,26 +209,26 @@ namespace adrilight
                 GC.Collect();
             }
         }
-        
+
         private int? _lastObservedHeight;
         private int? _lastObservedWidth;
 
         private void TraceFrameDetails(Bitmap image)
         {
-            //there are many frames per second and we need to extract useful information and only log those!
+            // There are many frames per second and we need to extract useful information and only log those!
             if (image == null)
             {
-                //if the frame is null, this can mean two things. the timeout from the desktop duplication api was reached
-                //before the monitor content changed or there was some other error.
+                // If the frame is null, this can mean two things. the timeout from the desktop duplication api was reached
+                // before the monitor content changed or there was some other error.
             }
             else
             {
                 if (_lastObservedHeight != null && _lastObservedWidth != null
                     && (_lastObservedHeight != image.Height || _lastObservedWidth != image.Width))
                 {
-                    _log.Debug("The frame size changed from {0}x{1} to {2}x{3}"
-                        , _lastObservedWidth, _lastObservedHeight
-                        , image.Width, image.Height);
+                    _log.Debug("The frame size changed from {0}x{1} to {2}x{3}",
+                        _lastObservedWidth, _lastObservedHeight,
+                        image.Width, image.Height);
 
                 }
                 _lastObservedWidth = image.Width;
@@ -232,52 +236,52 @@ namespace adrilight
             }
         }
 
-        private void ApplyColorCorrections(float r, float g, float b, out byte finalR, out byte finalG, out byte finalB, bool useLinearLighting, byte saturationTreshold
-            , byte lastColorR, byte lastColorG, byte lastColorB)
+        private void ApplyColorCorrections(float r, float g, float b, out byte finalR, out byte finalG, out byte finalB, bool useLinearLighting,
+            byte saturationTreshold, byte lastColorR, byte lastColorG, byte lastColorB)
         {
             if (lastColorR == 0 && lastColorG == 0 && lastColorB == 0)
             {
-                //if the color was black the last time, we increase the saturationThreshold to make flickering more unlikely
+                // If the color was black the last time, we increase the saturationThreshold to make flickering more unlikely
                 saturationTreshold += 2;
             }
             if (r <= saturationTreshold && g <= saturationTreshold && b <= saturationTreshold)
             {
-                //black
+                // Black
                 finalR = finalG = finalB = 0;
                 return;
             }
 
             var useAlternateWhiteBalance = UserSettings.AlternateWhiteBalanceMode == AlternateWhiteBalanceModeEnum.On
                 || UserSettings.AlternateWhiteBalanceMode == AlternateWhiteBalanceModeEnum.Auto && SettingsViewModel.IsInNightLightMode;
-            if (!useAlternateWhiteBalance)
-            {
-                r *= UserSettings.WhitebalanceRed / 100f;
-                g *= UserSettings.WhitebalanceGreen / 100f;
-                b *= UserSettings.WhitebalanceBlue / 100f;
-            }
-            else
+            if (useAlternateWhiteBalance)
             {
                 r *= UserSettings.AltWhitebalanceRed / 100f;
                 g *= UserSettings.AltWhitebalanceGreen / 100f;
                 b *= UserSettings.AltWhitebalanceBlue / 100f;
             }
-
-            if (!useLinearLighting)
-            {
-                //apply non linear LED fading ( http://www.mikrocontroller.net/articles/LED-Fading )
-                finalR = FadeNonLinear(r);
-                finalG = FadeNonLinear(g);
-                finalB = FadeNonLinear(b);
-            }
             else
             {
-                //output
+                r *= UserSettings.WhitebalanceRed / 100f;
+                g *= UserSettings.WhitebalanceGreen / 100f;
+                b *= UserSettings.WhitebalanceBlue / 100f;
+            }
+
+            if (useLinearLighting)
+            {
+                // Output
                 finalR = (byte)r;
                 finalG = (byte)g;
                 finalB = (byte)b;
             }
+            else
+            {
+                // Apply non linear LED fading ( http://www.mikrocontroller.net/articles/LED-Fading )
+                finalR = FadeNonLinear(r);
+                finalG = FadeNonLinear(g);
+                finalB = FadeNonLinear(b);
+            }
         }
-        
+
         private readonly byte[] _nonLinearFadingCache = Enumerable.Range(0, 2560)
             .Select(n => FadeNonLinearUncached(n / 10f))
             .ToArray();
@@ -334,7 +338,7 @@ namespace adrilight
             for (var y = spotRectangle.Top; y < spotRectangle.Bottom; y += stepy)
             {
                 byte* pointer = (byte*)bitmapData.Scan0 + bitmapData.Stride * y + 4 * spotRectangle.Left;
-                for (int i = 0; i < stepCount; i++)
+                for (var i = 0; i < stepCount; i++)
                 {
                     sumB += pointer[0];
                     sumG += pointer[1];
@@ -345,6 +349,5 @@ namespace adrilight
                 count += stepCount;
             }
         }
-
     }
 }

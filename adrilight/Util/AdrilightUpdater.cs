@@ -1,9 +1,4 @@
-﻿using adrilight.Resources;
-using Newtonsoft.Json;
-using NLog;
-using Semver;
-using Squirrel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,6 +7,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using adrilight.Resources;
+using Newtonsoft.Json;
+using NLog;
+using Semver;
+using Squirrel;
 
 namespace adrilight.Util
 {
@@ -28,7 +28,10 @@ namespace adrilight.Util
 
         public void StartThread()
         {
-            if (App.IsPrivateBuild) return;
+            if (App.IsPrivateBuild)
+            {
+                return;
+            }
 
 #if !DEBUG
             var t = new Thread(async () => await StartSquirrel())
@@ -56,7 +59,7 @@ namespace adrilight.Util
 
                         if (releaseEntry != null)
                         {
-                            //restart adrilight if an update was installed
+                            // Restart adrilight if an update was installed
                             UpdateManager.RestartApp();
                         }
                     }
@@ -66,7 +69,7 @@ namespace adrilight.Util
                     _log.Error(ex, $"error when update checking: {ex.GetType().FullName}: {ex.Message}");
                 }
 
-                //check once a day for updates
+                // Check once a day for updates
                 await Task.Delay(TimeSpan.FromDays(1));
             }
         }

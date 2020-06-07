@@ -17,7 +17,7 @@ namespace adrilight.Resources
         {
             get
             {
-                return this._dispatcher.Thread == Thread.CurrentThread;
+                return _dispatcher.Thread == Thread.CurrentThread;
             }
         }
 
@@ -29,21 +29,21 @@ namespace adrilight.Resources
         {
             Debug.Assert(dispatcher != null);
 
-            this._dispatcher = dispatcher;
+            _dispatcher = dispatcher;
         }
 
         public void Invoke(Action action)
         {
             Debug.Assert(action != null);
 
-            this._dispatcher.Invoke(action);
+            _dispatcher.Invoke(action);
         }
 
         public void BeginInvoke(Action action)
         {
             Debug.Assert(action != null);
 
-            this._dispatcher.BeginInvoke(action);
+            _dispatcher.BeginInvoke(action);
         }
     }
 }

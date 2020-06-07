@@ -35,7 +35,7 @@ namespace adrilight.ui
         private void Window_Closed(object sender, EventArgs e)
         {
             var settingsViewModel = DataContext as SettingsViewModel;
-            if(settingsViewModel != null)
+            if (settingsViewModel != null)
             {
                 settingsViewModel.IsSettingsWindowOpen = false;
             }

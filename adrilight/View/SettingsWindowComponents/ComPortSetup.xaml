@@ -1,19 +1,19 @@
 ﻿<UserControl x:Class="adrilight.View.SettingsWindowComponents.ComPortSetup"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{StaticResource MaterialDesignFont}"
              xmlns:local="clr-namespace:adrilight.View.SettingsWindowComponents"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:validationRules="clr-namespace:adrilight.ViewModel.ValidationRules"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="391.45" d:DesignWidth="991.636">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
@@ -30,7 +30,7 @@
                 <materialDesign:PackIcon Kind="Settings" Margin="0 8 0 0" Width="132" Height="132"
                                          VerticalAlignment="Center"
                                          HorizontalAlignment="Center"/>
-                
+
                 <StackPanel Grid.Row="1" Margin="8 24 8 8" >
                     <TextBlock FontWeight="Bold">COM Port</TextBlock>
                     <ComboBox
@@ -80,8 +80,8 @@
                         <TextBlock FontWeight="Bold">Send Random Colors</TextBlock>
                     </DockPanel>
                     <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" Margin="0 8 0 0" TextAlignment="Justify">
-                        This is a test feature to find errors in the setup. If you turn this on, it will send random colors 
-                        to the arduino instead of the actual detected colors. Number of LEDs is still respected and it only 
+                        This is a test feature to find errors in the setup. If you turn this on, it will send random colors
+                        to the arduino instead of the actual detected colors. Number of LEDs is still respected and it only
                         works, if you enable sending in the next card.
                     </TextBlock>
                 </StackPanel>
@@ -98,7 +98,7 @@
                 <materialDesign:PackIcon Kind="PlayPause" Margin="0 8 0 0" Width="132" Height="132"
                                          VerticalAlignment="Center"
                                          HorizontalAlignment="Center"/>
-                
+
                 <StackPanel Grid.Row="1" Margin="8 24 8 8">
                     <DockPanel>
                         <ToggleButton DockPanel.Dock="Right" IsEnabled="{Binding TransferCanBeStarted}"

@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Buffers;
 using System.Diagnostics;
 using System.IO.Ports;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using NLog;
-using System.Buffers;
 using System.Windows.Media;
 using adrilight.Util;
-using System.Linq;
 using Newtonsoft.Json;
+using NLog;
 
 namespace adrilight
 {
@@ -51,7 +51,7 @@ namespace adrilight
                 if (IsValid())
                 {
 
-                    //start it
+                    // Start it
                     _log.Debug("starting the serial stream");
                     Start();
                 }
@@ -63,15 +63,14 @@ namespace adrilight
             }
             else if (!UserSettings.TransferActive && IsRunning)
             {
-                //stop it
+                // Stop it
                 _log.Debug("stopping the serial stream");
                 Stop();
             }
         }
 
-        private readonly byte[] _messagePreamble = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
+        private readonly byte[] _messagePreamble = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09 };
         private readonly byte[] _messagePostamble = { 85, 204, 165 };
-
 
         private Thread _workerThread;
         private CancellationTokenSource _cancellationTokenSource;
@@ -83,7 +82,10 @@ namespace adrilight
         public void Start()
         {
             _log.Debug("Start called.");
-            if (_workerThread != null) return;
+            if (_workerThread != null)
+            {
+                return;
+            }
 
             _cancellationTokenSource = new CancellationTokenSource();
             _workerThread = new Thread(DoWork)
@@ -97,7 +99,10 @@ namespace adrilight
         public void Stop()
         {
             _log.Debug("Stop called.");
-            if (_workerThread == null) return;
+            if (_workerThread == null)
+            {
+                return;
+            }
 
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource = null;
@@ -114,11 +119,11 @@ namespace adrilight
         {
             byte[] outputStream;
 
-            int counter = _messagePreamble.Length;
+            var counter = _messagePreamble.Length;
             lock (SpotSet.Lock)
             {
                 const int colorsPerLed = 3;
-                int bufferLength = _messagePreamble.Length
+                var bufferLength = _messagePreamble.Length
                     + (SpotSet.Spots.Length * colorsPerLed)
                     + _messagePostamble.Length;
 
@@ -133,9 +138,9 @@ namespace adrilight
                 {
                     if (!UserSettings.SendRandomColors)
                     {
-                        outputStream[counter++] = spot.Blue; // blue
-                        outputStream[counter++] = spot.Green; // green
-                        outputStream[counter++] = spot.Red; // red
+                        outputStream[counter++] = spot.Blue; // Blue
+                        outputStream[counter++] = spot.Green; // Green
+                        outputStream[counter++] = spot.Red; // Red
 
                         allBlack = allBlack && spot.Red == 0 && spot.Green == 0 && spot.Blue == 0;
                     }
@@ -144,9 +149,9 @@ namespace adrilight
                         allBlack = false;
                         var n = frameCounter % 360;
                         var c = ColorUtil.FromAhsb(255, n, 1, 0.5f);
-                        outputStream[counter++] = c.B; // blue
-                        outputStream[counter++] = c.G; // green
-                        outputStream[counter++] = c.R; // red
+                        outputStream[counter++] = c.B; // Blue
+                        outputStream[counter++] = c.G; // Green
+                        outputStream[counter++] = c.R; // Red
                     }
                 }
 
@@ -161,10 +166,10 @@ namespace adrilight
 
         private void DoWork(object tokenObject)
         {
-            var cancellationToken = (CancellationToken) tokenObject;
+            var cancellationToken = (CancellationToken)tokenObject;
             ISerialPortWrapper serialPort = null;
 
-            if (String.IsNullOrEmpty(UserSettings.ComPort))
+            if (string.IsNullOrEmpty(UserSettings.ComPort))
             {
                 _log.Warn("Cannot start the serial sending because the comport is not selected.");
                 return;
@@ -173,7 +178,7 @@ namespace adrilight
             frameCounter = 0;
             blackFrameCounter = 0;
 
-            //retry after exceptions...
+            // Retry after exceptions...
             while (!cancellationToken.IsCancellationRequested)
             {
                 try
@@ -183,52 +188,53 @@ namespace adrilight
 
                     while (!cancellationToken.IsCancellationRequested)
                     {
-                        //open or change the serial port
+                        // Open or change the serial port
                         if (openedComPort != UserSettings.ComPort)
                         {
                             serialPort?.Close();
-                            
-                            serialPort = UserSettings.ComPort!= "Fake Port" 
-                                ? (ISerialPortWrapper) new WrappedSerialPort(new SerialPort(UserSettings.ComPort, baudRate)) 
+
+                            serialPort = UserSettings.ComPort != "Fake Port"
+                                ? (ISerialPortWrapper)new WrappedSerialPort(new SerialPort(UserSettings.ComPort, baudRate))
                                 : new FakeSerialPort();
 
                             try
                             {
                                 serialPort.Open();
                             }
-                            catch {
-                                // useless UnauthorizedAccessException 
+                            catch
+                            {
+                                // Useless UnauthorizedAccessException
                             }
 
                             if (!serialPort.IsOpen)
                             {
                                 serialPort = null;
 
-                                //allow the system some time to recover
+                                // Allow the system some time to recover
                                 Thread.Sleep(500);
                                 continue;
                             }
                             openedComPort = UserSettings.ComPort;
                         }
 
-                        //send frame data
+                        // Send frame data
                         var (outputBuffer, streamLength) = GetOutputStream();
                         serialPort.Write(outputBuffer, 0, streamLength);
 
                         if (++frameCounter == 1024 && blackFrameCounter > 1000)
                         {
-                            //there is maybe something wrong here because most frames where black. report it once per run only
+                            // There is maybe something wrong here because most frames where black. report it once per run only
                             var settingsJson = JsonConvert.SerializeObject(UserSettings, Formatting.None);
                             _log.Info($"Sent {frameCounter} frames already. {blackFrameCounter} were completely black. Settings= {settingsJson}");
                         }
                         ArrayPool<byte>.Shared.Return(outputBuffer);
 
-                        //ws2812b LEDs need 30 µs = 0.030 ms for each led to set its color so there is a lower minimum to the allowed refresh rate
-                        //receiving over serial takes it time as well and the arduino does both tasks in sequence
-                        //+1 ms extra safe zone
-                        var fastLedTime = (streamLength - _messagePreamble.Length - _messagePostamble.Length) /3.0*0.030d;
-                        var serialTransferTime = streamLength * 10.0*1000.0/ baudRate;
-                        var minTimespan = (int) (fastLedTime + serialTransferTime) + 1;
+                        // WS2812b LEDs need 30 µs = 0.030 ms for each led to set its color so there is a lower minimum to the allowed refresh rate
+                        // receiving over serial takes it time as well and the arduino does both tasks in sequence
+                        // + 1 ms extra safe zone
+                        var fastLedTime = (streamLength - _messagePreamble.Length - _messagePostamble.Length) / 3.0 * 0.030d;
+                        var serialTransferTime = streamLength * 10.0 * 1000.0 / baudRate;
+                        var minTimespan = (int)(fastLedTime + serialTransferTime) + 1;
 
                         Thread.Sleep(minTimespan);
                     }
@@ -246,7 +252,7 @@ namespace adrilight
                         _log.Debug(ex, "Exception catched.");
                     }
 
-                    //to be safe, we reset the serial port
+                    // To be safe, we reset the serial port
                     if (serialPort != null && serialPort.IsOpen)
                     {
                         serialPort.Close();
@@ -254,7 +260,7 @@ namespace adrilight
                     serialPort?.Dispose();
                     serialPort = null;
 
-                    //allow the system some time to recover
+                    // Allow the system some time to recover
                     Thread.Sleep(500);
                 }
                 finally
@@ -266,7 +272,6 @@ namespace adrilight
                     }
                 }
             }
-
         }
 
         public void Dispose()

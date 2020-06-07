@@ -19,15 +19,17 @@ namespace adrilight.benchmarks
                 FadeNonLinear1(c);
             }
         }
+
         private static float FadeNonLinear1(float color)
         {
             const float factor = 80f;
             return 256f * ((float)Math.Pow(factor, color / 256f) - 1f) / (factor - 1);
         }
+
         private static byte FadeNonLinear2(float color)
         {
             const float factor = 80f;
-            return (byte) (256f * ((float)Math.Pow(factor, color / 256f) - 1f) / (factor - 1));
+            return (byte)(256f * ((float)Math.Pow(factor, color / 256f) - 1f) / (factor - 1));
         }
 
         [Benchmark(OperationsPerInvoke = OPS_COUNT)]
@@ -58,6 +60,7 @@ namespace adrilight.benchmarks
         {
             return _cached256[(int)color];
         }
+
         [Benchmark(OperationsPerInvoke = OPS_COUNT)]
         public static void FadeNonLinear_Byte_Cached256_int()
         {
@@ -73,11 +76,8 @@ namespace adrilight.benchmarks
             return _cached256[(byte)color];
         }
 
-
-
-
         private static readonly byte[] _cached2560 = Enumerable.Range(0, 2560)
-            .Select(n => FadeNonLinear2(n/10f))
+            .Select(n => FadeNonLinear2(n / 10f))
             .ToArray();
 
         [Benchmark(OperationsPerInvoke = OPS_COUNT)]
@@ -92,7 +92,7 @@ namespace adrilight.benchmarks
 
         private static byte FadeNonLinear_Lookup2560(float color)
         {
-            return _cached2560[(int)(color*10)];
+            return _cached2560[(int)(color * 10)];
         }
     }
 }

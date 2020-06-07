@@ -1,11 +1,4 @@
-﻿using adrilight.DesktopDuplication;
-using adrilight.Resources;
-using adrilight.Settings;
-using adrilight.View;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -20,6 +13,13 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using adrilight.DesktopDuplication;
+using adrilight.Resources;
+using adrilight.Settings;
+using adrilight.View;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
+using NLog;
 
 namespace adrilight.ViewModel
 {
@@ -32,20 +32,19 @@ namespace adrilight.ViewModel
         private const string NightlightMdPage = "https://github.com/fabsenet/adrilight/blob/master/NightlightDetection.md";
         private const string LatestReleasePage = "https://github.com/fabsenet/adrilight/releases/latest";
 
-        public SettingsViewModel(IUserSettings userSettings, IList<ISelectableViewPart> selectableViewParts
-            , ISpotSet spotSet, IContext context, ISerialStream serialStream)
+        public SettingsViewModel(IUserSettings userSettings, IList<ISelectableViewPart> selectableViewParts,
+            ISpotSet spotSet, IContext context, ISerialStream serialStream)
         {
             if (selectableViewParts == null)
             {
                 throw new ArgumentNullException(nameof(selectableViewParts));
             }
 
-            this.Settings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
-            this.spotSet = spotSet ?? throw new ArgumentNullException(nameof(spotSet));
+            Settings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
+            SpotSet = spotSet ?? throw new ArgumentNullException(nameof(spotSet));
             Context = context ?? throw new ArgumentNullException(nameof(context));
-            this.serialStream = serialStream ?? throw new ArgumentNullException(nameof(serialStream));
-            SelectableViewParts = selectableViewParts.OrderBy(p => p.Order)
-                .ToList();
+            SerialStream = serialStream ?? throw new ArgumentNullException(nameof(serialStream));
+            SelectableViewParts = selectableViewParts.OrderBy(p => p.Order).ToList();
 #if DEBUG
             SelectedViewPart = SelectableViewParts.Last();
 #else
@@ -109,9 +108,9 @@ namespace adrilight.ViewModel
         }
 
         public string Title { get; } = $"adrilight {App.VersionNumber}";
-        public int LedCount => SpotSet.CountLeds(Settings.SpotsX, Settings.SpotsY);
+        public int LedCount => adrilight.SpotSet.CountLeds(Settings.SpotsX, Settings.SpotsY);
 
-        public bool TransferCanBeStarted => serialStream.IsValid();
+        public bool TransferCanBeStarted => SerialStream.IsValid();
         public bool TransferCanNotBeStarted => !TransferCanBeStarted;
 
         public bool UseNonLinearLighting
@@ -172,7 +171,7 @@ namespace adrilight.ViewModel
             {
                 if (PreviewImageSource == null)
                 {
-                    //first run creates writableimage
+                    // First run creates writableimage
                     var imagePtr = image.GetHbitmap();
                     try
                     {
@@ -186,7 +185,7 @@ namespace adrilight.ViewModel
                 }
                 else
                 {
-                    //next runs reuse the writable image
+                    // Next runs reuse the writable image
                     Rectangle colorBitmapRectangle = new Rectangle(0, 0, image.Width, image.Height);
                     Int32Rect colorBitmapInt32Rect = new Int32Rect(0, 0, PreviewImageSource.PixelWidth, PreviewImageSource.PixelHeight);
 
@@ -198,6 +197,7 @@ namespace adrilight.ViewModel
                 }
             });
         }
+
         public WriteableBitmap _previewImageSource;
         public WriteableBitmap PreviewImageSource
         {
@@ -213,7 +213,6 @@ namespace adrilight.ViewModel
                 RaisePropertyChanged(() => CanvasHeight);
             }
         }
-
 
         public ICommand OpenUrlProjectPageCommand { get; } = new RelayCommand(() => OpenUrl(ProjectPage));
         public ICommand OpenUrlIssuesPageCommand { get; } = new RelayCommand(() => OpenUrl(IssuesPage));
@@ -233,8 +232,8 @@ namespace adrilight.ViewModel
         }
 
         private int _spotsYMaximum = 300;
-        private readonly ISpotSet spotSet;
-        private readonly ISerialStream serialStream;
+        private readonly ISpotSet SpotSet;
+        private readonly ISerialStream SerialStream;
 
         public int SpotsYMaximum
         {
@@ -259,28 +258,26 @@ namespace adrilight.ViewModel
         public ISpot[] PreviewSpots
         {
             get => _previewSpots;
-            set {
+            set
+            {
                 _previewSpots = value;
                 RaisePropertyChanged();
             }
         }
 
-        public Uri WhatsNewUrl {
+        public Uri WhatsNewUrl
+        {
             get
             {
-                if (App.IsPrivateBuild)
-                {
-                    return new Uri($"https://fabse.net/adrilight/privateBuild/{Thread.CurrentThread.CurrentUICulture.Name}");
-                }
-                else
-                {
-                    return new Uri($"https://fabse.net/adrilight/{App.VersionNumber}/{Thread.CurrentThread.CurrentUICulture.Name}");
-                }
+                return App.IsPrivateBuild
+                    ? new Uri($"https://fabse.net/adrilight/privateBuild/{Thread.CurrentThread.CurrentUICulture.Name}")
+                    : new Uri($"https://fabse.net/adrilight/{App.VersionNumber}/{Thread.CurrentThread.CurrentUICulture.Name}");
             }
         }
 
         public bool _isInNightLightMode = false;
-        public bool IsInNightLightMode {
+        public bool IsInNightLightMode
+        {
             get => _isInNightLightMode;
             set
             {
@@ -292,7 +289,8 @@ namespace adrilight.ViewModel
         public bool IsInDaylightLightMode { get { return !_isInNightLightMode; } }
 
         public IDictionary<AlternateWhiteBalanceModeEnum, string> AlternateWhiteBalanceModes { get; } =
-            new SortedDictionary<AlternateWhiteBalanceModeEnum, string>() {
+            new SortedDictionary<AlternateWhiteBalanceModeEnum, string>()
+            {
                 {AlternateWhiteBalanceModeEnum.On, "Forced On" },
                 {AlternateWhiteBalanceModeEnum.Auto, "Auto detect" },
                 {AlternateWhiteBalanceModeEnum.Off, "Forced Off" },

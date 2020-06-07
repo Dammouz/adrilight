@@ -1,13 +1,13 @@
-﻿using adrilight.Settings;
-using GalaSoft.MvvmLight;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using adrilight.Settings;
+using GalaSoft.MvvmLight;
+using Newtonsoft.Json;
 
 namespace adrilight
 {
@@ -44,7 +44,7 @@ namespace adrilight
         private int _configFileVersion = 2;
         private AlternateWhiteBalanceModeEnum _alternateWhiteBalanceMode = AlternateWhiteBalanceModeEnum.Off;
 
-        //support future config file migration
+        // Support future config file migration
         public int ConfigFileVersion { get => _configFileVersion; set { Set(() => ConfigFileVersion, ref _configFileVersion, value); } }
 
 

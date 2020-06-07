@@ -8,56 +8,52 @@ namespace adrilight.Util
 {
     class ColorUtil
     {
-        //source https://stackoverflow.com/a/18840768
+        // Source: https://stackoverflow.com/a/18840768
         public static System.Drawing.Color FromAhsb(int alpha, float hue, float saturation, float brightness)
         {
-            if (0 > alpha
-                || 255 < alpha)
+            if (0 > alpha || 255 < alpha)
             {
-                throw new ArgumentOutOfRangeException(
-                    "alpha",
+                throw new ArgumentOutOfRangeException("alpha",
                     alpha,
                     "Value must be within a range of 0 - 255.");
             }
 
-            if (0f > hue
-                || 360f < hue)
+            if (0f > hue || 360f < hue)
             {
-                throw new ArgumentOutOfRangeException(
-                    "hue",
+                throw new ArgumentOutOfRangeException("hue",
                     hue,
                     "Value must be within a range of 0 - 360.");
             }
 
-            if (0f > saturation
-                || 1f < saturation)
+            if (0f > saturation || 1f < saturation)
             {
-                throw new ArgumentOutOfRangeException(
-                    "saturation",
+                throw new ArgumentOutOfRangeException("saturation",
                     saturation,
                     "Value must be within a range of 0 - 1.");
             }
 
-            if (0f > brightness
-                || 1f < brightness)
+            if (0f > brightness || 1f < brightness)
             {
-                throw new ArgumentOutOfRangeException(
-                    "brightness",
+                throw new ArgumentOutOfRangeException("brightness",
                     brightness,
                     "Value must be within a range of 0 - 1.");
             }
 
             if (0 == saturation)
             {
-                return System.Drawing.Color.FromArgb(
-                                    alpha,
-                                    Convert.ToInt32(brightness * 255),
-                                    Convert.ToInt32(brightness * 255),
-                                    Convert.ToInt32(brightness * 255));
+                return System.Drawing.Color.FromArgb(alpha,
+                    Convert.ToInt32(brightness * 255),
+                    Convert.ToInt32(brightness * 255),
+                    Convert.ToInt32(brightness * 255));
             }
 
-            float fMax, fMid, fMin;
-            int iSextant, iMax, iMid, iMin;
+            float fMax;
+            float fMid;
+            float fMin;
+            int iSextant;
+            int iMax;
+            int iMid;
+            int iMin;
 
             if (0.5 < brightness)
             {

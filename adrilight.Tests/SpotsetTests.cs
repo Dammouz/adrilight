@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Linq;
 using adrilight.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -40,7 +38,7 @@ namespace adrilight.Tests
 
             Assert.IsNotNull(spots, "spotset.Spots");
             Assert.AreEqual(4, spots.Length, "spotset.Spots.Length");
-            Assert.AreEqual(new Rectangle(84, 0, 90/8, 80/8), spots[0].Rectangle, "spots[0].Rectangle");
+            Assert.AreEqual(new Rectangle(84, 0, 90 / 8, 80 / 8), spots[0].Rectangle, "spots[0].Rectangle");
         }
 
         [TestMethod]
@@ -62,7 +60,7 @@ namespace adrilight.Tests
             var spots = SpotSet.BuildSpots(1920, 1080, userSettings.Object);
 
             Assert.IsNotNull(spots, "spotset.Spots");
-            Assert.AreEqual(2+2+2+2, spots.Length, "spotset.Spots.Length");
+            Assert.AreEqual(2 + 2 + 2 + 2, spots.Length, "spotset.Spots.Length");
             Assert.AreEqual(new Rectangle(639, 0, 1, 1), spots[0].Rectangle, "spotset.Spots[0].Rectangle");
         }
 
@@ -88,6 +86,7 @@ namespace adrilight.Tests
             Assert.AreEqual(2 + 2 + 2 + 2, spots.Length, "spotset.Spots.Length");
             Assert.AreEqual(new Rectangle(0, 359, 1, 1), spots[0].Rectangle, "spotset.Spots[0].Rectangle");
         }
+
         [TestMethod]
         public void BuildSpotset_2x2_Offset2_works()
         {
@@ -111,7 +110,7 @@ namespace adrilight.Tests
             Assert.AreEqual(new Rectangle(0, 719, 1, 1), spots[0].Rectangle, "spotset.Spots[0].Rectangle");
         }
 
-        //https://github.com/fabsenet/adrilight/issues/68
+        // Following https://github.com/fabsenet/adrilight/issues/68
         [TestMethod]
         public void BuildSpotset_4k_BorderDistance_1()
         {
@@ -128,11 +127,11 @@ namespace adrilight.Tests
                 .SetupProperty(s => s.MirrorY, false)
                 ;
 
-            var spots = SpotSet.BuildSpots(3840/8, 2160/8, userSettings.Object);
+            var spots = SpotSet.BuildSpots(3840 / 8, 2160 / 8, userSettings.Object);
 
             Assert.IsNotNull(spots, "spotset.Spots");
-            Assert.AreEqual(40+40+25+25, spots.Length, "spotset.Spots.Length");
-            Assert.AreEqual(new Rectangle(11, 0, 28/8, 30/8), spots[0].Rectangle, "spotset.Spots[0].Rectangle");
+            Assert.AreEqual(40 + 40 + 25 + 25, spots.Length, "spotset.Spots.Length");
+            Assert.AreEqual(new Rectangle(11, 0, 28 / 8, 30 / 8), spots[0].Rectangle, "spotset.Spots[0].Rectangle");
         }
 
         [TestMethod]
@@ -147,12 +146,11 @@ namespace adrilight.Tests
             Assert.AreEqual((0, 1), items[3], "item 3");
         }
 
-
         [TestMethod]
         public void BoundsWalker_5_3()
         {
             var items = SpotSet.BoundsWalker(5, 3).ToList();
-            Assert.AreEqual(5+5+3+3, items.Count, "items.Count");
+            Assert.AreEqual(5 + 5 + 3 + 3, items.Count, "items.Count");
 
             Assert.AreEqual(0, items.Select(i => i.x).Min(), "min x");
             Assert.AreEqual(6, items.Select(i => i.x).Max(), "max x");
@@ -177,12 +175,11 @@ namespace adrilight.Tests
             Assert.AreEqual((0, 1), items[15], "item 15");
         }
 
-
         [TestMethod]
         public void BoundsWalker_7_5()
         {
             var items = SpotSet.BoundsWalker(7, 5).ToList();
-            Assert.AreEqual(7+7+5+5, items.Count, "items.Count");
+            Assert.AreEqual(7 + 7 + 5 + 5, items.Count, "items.Count");
 
             Assert.AreEqual(0, items.Select(i => i.x).Min(), "min x");
             Assert.AreEqual(8, items.Select(i => i.x).Max(), "max x");

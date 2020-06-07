@@ -1,11 +1,11 @@
-﻿using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using NLog;
 
 namespace adrilight.Util
 {
@@ -20,7 +20,9 @@ namespace adrilight.Util
         public void Open() => IsOpen = true;
         public void Close() => IsOpen = false;
 
-        public void Dispose() {}
+        public void Dispose()
+        {
+        }
 
         private static readonly FpsLogger fpsLogger = new FpsLogger("FakeSerialPort");
 

@@ -13,10 +13,10 @@ namespace adrilight.Tests
 
             var settings = manager.LoadIfExists() ?? manager.MigrateOrDefault();
 
-            var b = (byte)(new Random().NextDouble()*255);
+            var b = (byte)(new Random().NextDouble() * 255);
 
             settings.WhitebalanceBlue = b;
-            //save should happen automatically!
+            // Save should happen automatically!
 
             var settings2 = manager.LoadIfExists();
             Assert.AreEqual(b, settings.WhitebalanceBlue, "settings.WhitebalanceBlue");

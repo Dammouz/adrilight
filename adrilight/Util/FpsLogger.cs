@@ -1,6 +1,4 @@
-﻿using MoreLinq;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
@@ -8,6 +6,8 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
+using MoreLinq;
+using NLog;
 
 namespace adrilight.Util
 {
@@ -19,10 +19,10 @@ namespace adrilight.Util
         private readonly Subject<Unit> _frames = new Subject<Unit>();
 
 #if DEBUG
-        //infinite timespan sequence: forever 1s
+        // Infinite timespan sequence: forever 1s
         private readonly IEnumerable<TimeSpan> _logTimes = MoreEnumerable.Generate(TimeSpan.FromSeconds(1), _ => TimeSpan.FromSeconds(1));
 #else
-        //infinite timespan sequence: 10x 1s, then forever 5min
+        // Infinite timespan sequence: 10x 1s, then forever 5min
         private readonly IEnumerable<TimeSpan> _logTimes =
             Enumerable.Repeat(TimeSpan.FromSeconds(1), 10)
             .Concat(MoreEnumerable.Generate(TimeSpan.FromMinutes(5), _ => TimeSpan.FromMinutes(5)));
@@ -31,7 +31,6 @@ namespace adrilight.Util
         private readonly IEnumerator<TimeSpan> _enumerator;
         private readonly IDisposable _loggingSubscription;
         private readonly IDisposable _valueUpdatingSubscription;
-
 
         public FpsLogger(string name)
         {
@@ -59,7 +58,10 @@ namespace adrilight.Util
 
         private void WriteFpsLog(int fps)
         {
-            if (fps == 0) return;
+            if (fps == 0)
+            {
+                return;
+            }
 
             _log.Debug($"there were {fps} frames for {_name} in the last second.");
         }

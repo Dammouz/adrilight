@@ -10,6 +10,7 @@ namespace adrilight
 
         void Run(CancellationToken token);
     }
+
     public enum RunStateEnum
     {
         Stopped,

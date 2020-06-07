@@ -1,12 +1,6 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Win32;
 
 namespace NighlightDetectionModelGenerator
 {
@@ -21,18 +15,30 @@ namespace NighlightDetectionModelGenerator
             var tks = new CancellationTokenSource();
             var nl = new NightLightStatusWatcher(tks.Token);
 
-            while(true)
+            while (true)
             {
                 ConsoleKeyInfo key = Console.ReadKey(true);
-                if(key.KeyChar == '+') { nl.AddLast(true); }
-                else if (key.KeyChar == '-') { nl.AddLast(false); }
-                else if (key.KeyChar == 'w') { nl.WriteToFile(); }
-                else if (key.KeyChar == 't') { nl.TrainAndGuess(); }
-                else if (key.Key == ConsoleKey.Enter) { return; }
+                if (key.KeyChar == '+')
+                {
+                    nl.AddLast(true);
+                }
+                else if (key.KeyChar == '-')
+                {
+                    nl.AddLast(false);
+                }
+                else if (key.KeyChar == 'w')
+                {
+                    nl.WriteToFile();
+                }
+                else if (key.KeyChar == 't')
+                {
+                    nl.TrainAndGuess();
+                }
+                else if (key.Key == ConsoleKey.Enter)
+                {
+                    return;
+                }
             }
         }
-
     }
-
-
 }

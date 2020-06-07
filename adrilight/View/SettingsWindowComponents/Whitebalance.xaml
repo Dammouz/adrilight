@@ -1,19 +1,19 @@
 ﻿<UserControl x:Class="adrilight.View.SettingsWindowComponents.Whitebalance"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d" 
-             
+             mc:Ignorable="d"
+
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{StaticResource MaterialDesignFont}"
-             
+
              d:DesignHeight="900" d:DesignWidth="900">
     <Grid Width="900">
         <Grid.RowDefinitions>
@@ -35,8 +35,8 @@
                     If you think of some neutral white like a piece of paper, what color does it actually have? Well that depends on the light. Your TV or monitor can display a neutral white or grey also with a warm or cold tint making it more blueish like daylight or making it more yellowish like artifical lighting. Also the LED strip you are using may have its own tint as well.
                     <LineBreak />
                     <LineBreak />
-                    
-                    What you need to do is: 
+
+                    What you need to do is:
                     <LineBreak />
                     1. Make your room as dark as possible to reduce the interference from other light sources.
                     <LineBreak />
@@ -45,7 +45,7 @@
                     3. Then display some grey content on the screen and adjust the sliders on this page until the color of the LEDs matches the color of your TV.
                     <LineBreak />
                     <LineBreak />
-                    Bonus tip: try to leave the sliders as far on the right as you can. 
+                    Bonus tip: try to leave the sliders as far on the right as you can.
                     Turning them too low will reduce maximum LED brightness and the overall dynamic range of the LEDs.
                     At least one of them should always be on 100.
                 </TextBlock>
@@ -77,16 +77,16 @@
                 <TextBlock Grid.Row="3" VerticalAlignment="Bottom">Blue</TextBlock>
 
                 <Slider Grid.Row="1" Grid.Column="1" Width="200" IsEnabled="{Binding IsInDaylightLightMode}"
-                    Minimum="1" Maximum="100" Value="{Binding Settings.WhitebalanceRed}" 
-                    Style="{StaticResource MaterialDesignDiscreteSlider}" 
+                    Minimum="1" Maximum="100" Value="{Binding Settings.WhitebalanceRed}"
+                    Style="{StaticResource MaterialDesignDiscreteSlider}"
                                  />
                 <Slider Grid.Row="2" Grid.Column="1" Width="200" IsEnabled="{Binding IsInDaylightLightMode}"
-                    Minimum="1" Maximum="100" Value="{Binding Settings.WhitebalanceGreen}" 
-                    Style="{StaticResource MaterialDesignDiscreteSlider}" 
+                    Minimum="1" Maximum="100" Value="{Binding Settings.WhitebalanceGreen}"
+                    Style="{StaticResource MaterialDesignDiscreteSlider}"
                                  />
                 <Slider Grid.Row="3" Grid.Column="1" Width="200" IsEnabled="{Binding IsInDaylightLightMode}"
-                    Minimum="1" Maximum="100" Value="{Binding Settings.WhitebalanceBlue}" 
-                    Style="{StaticResource MaterialDesignDiscreteSlider}" 
+                    Minimum="1" Maximum="100" Value="{Binding Settings.WhitebalanceBlue}"
+                    Style="{StaticResource MaterialDesignDiscreteSlider}"
                                  />
 
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Settings.WhitebalanceRed}" VerticalAlignment="Bottom" />
@@ -117,16 +117,16 @@
                 <TextBlock Grid.Row="3" VerticalAlignment="Bottom">Blue</TextBlock>
 
                 <Slider Grid.Row="1" Grid.Column="1" Width="200" IsEnabled="{Binding IsInNightLightMode}"
-                    Minimum="1" Maximum="100" Value="{Binding Settings.AltWhitebalanceRed}" 
-                    Style="{StaticResource MaterialDesignDiscreteSlider}" 
+                    Minimum="1" Maximum="100" Value="{Binding Settings.AltWhitebalanceRed}"
+                    Style="{StaticResource MaterialDesignDiscreteSlider}"
                                  />
                 <Slider Grid.Row="2" Grid.Column="1" Width="200" IsEnabled="{Binding IsInNightLightMode}"
-                    Minimum="1" Maximum="100" Value="{Binding Settings.AltWhitebalanceGreen}" 
-                    Style="{StaticResource MaterialDesignDiscreteSlider}" 
+                    Minimum="1" Maximum="100" Value="{Binding Settings.AltWhitebalanceGreen}"
+                    Style="{StaticResource MaterialDesignDiscreteSlider}"
                                  />
                 <Slider Grid.Row="3" Grid.Column="1" Width="200" IsEnabled="{Binding IsInNightLightMode}"
-                    Minimum="1" Maximum="100" Value="{Binding Settings.AltWhitebalanceBlue}" 
-                    Style="{StaticResource MaterialDesignDiscreteSlider}" 
+                    Minimum="1" Maximum="100" Value="{Binding Settings.AltWhitebalanceBlue}"
+                    Style="{StaticResource MaterialDesignDiscreteSlider}"
                                  />
 
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Settings.AltWhitebalanceRed}" VerticalAlignment="Bottom" />
@@ -140,9 +140,9 @@
                 <TextBlock FontWeight="bold">Controling alternate night light mode detection/usage:</TextBlock>
 
                 <TextBlock Margin="58 18 38 8" FontWeight="bold">Selected mode:</TextBlock>
-                <ComboBox Margin="58 0 0 40" 
-                          Width="150" 
-                          HorizontalAlignment="Left" 
+                <ComboBox Margin="58 0 0 40"
+                          Width="150"
+                          HorizontalAlignment="Left"
                           ItemsSource="{Binding AlternateWhiteBalanceModes}"
                           DisplayMemberPath="Value"
                           SelectedValuePath="Key"
@@ -216,19 +216,19 @@
                     <TextBlock Margin="58 8 18 38" FontWeight="Bold" Grid.Row="2" Grid.Column="0">Forced Off</TextBlock>
 
                     <TextBlock Margin="8 0 50 0" Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" TextAlignment="Justify">
-                        This mode <Italic>enables</Italic> the alternate whitebalance without any other external source 
+                        This mode <Italic>enables</Italic> the alternate whitebalance without any other external source
                         of information. You basically have to decide on your own when to use this or not
                     </TextBlock>
                     <TextBlock Margin="8 0 50 0" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" TextAlignment="Justify">
-                        This mode tries to detect the actual night light mode of Windows to switch automatically 
-                        the mode at the same time. Consider this mode as <Span Foreground="#FFFD7474">experimental</Span>. 
+                        This mode tries to detect the actual night light mode of Windows to switch automatically
+                        the mode at the same time. Consider this mode as <Span Foreground="#FFFD7474">experimental</Span>.
                         <LineBreak/>
                         <Hyperlink Command="{Binding OpenNightlightMdPageCommand}" Foreground="#FF84C1FF">
                             Learn how it works and how to report errors
                         </Hyperlink>
                     </TextBlock>
                     <TextBlock Margin="8 0 50 0" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" TextAlignment="Justify">
-                        This mode <Italic>disables</Italic> the alternate whitebalance without any other external source 
+                        This mode <Italic>disables</Italic> the alternate whitebalance without any other external source
                         of information. You basically have to decide on your own when to use this or not.
                     </TextBlock>
                 </Grid>

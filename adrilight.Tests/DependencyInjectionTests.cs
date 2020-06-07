@@ -1,5 +1,4 @@
-﻿using System;
-using adrilight.ViewModel;
+﻿using adrilight.ViewModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ninject;
 

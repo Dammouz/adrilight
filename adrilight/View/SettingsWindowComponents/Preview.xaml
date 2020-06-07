@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="adrilight.View.SettingsWindowComponents.Preview"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
               xmlns:fakes="clr-namespace:adrilight.Fakes"
@@ -9,11 +9,11 @@
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{StaticResource MaterialDesignFont}"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
               d:DataContext="{Binding Source={d:DesignInstance {x:Type vm:ViewModelLocator}, IsDesignTimeCreatable=True}, Path=SettingsViewModel}"
              d:DesignHeight="900" d:DesignWidth="900">
     <UserControl.Resources>
@@ -40,7 +40,7 @@
                 </TextBlock>
             </StackPanel>
         </materialDesign:Card>
-        
+
         <materialDesign:PackIcon Kind="BatteryAlert" Width="29" Height="29" Foreground="{StaticResource SecondaryAccentBrush}"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" RenderTransformOrigin="0.5,0.5" Margin="12.2,20.2,0,0" >
             <materialDesign:PackIcon.RenderTransform>
                 <TransformGroup>
@@ -63,10 +63,10 @@
                         </LinearGradientBrush>
                     </Canvas.Background>
 
-                    <Image Source="{Binding PreviewImageSource}" 
+                    <Image Source="{Binding PreviewImageSource}"
                            Width="{Binding ScreenWidth}" Height="{Binding ScreenHeight}"
                            Canvas.Left="{Binding CanvasPadding}" Canvas.Top="{Binding CanvasPadding}" Opacity="0.7" />
-                   
+
                     <ItemsControl ItemsSource="{Binding PreviewSpots}"
                            Canvas.Left="{Binding CanvasPadding}" Canvas.Top="{Binding CanvasPadding}" >
                         <ItemsControl.ItemsPanel>
@@ -83,16 +83,16 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                <Rectangle Width="{Binding Rectangle.Width}" Height="{Binding Rectangle.Height}">
-                                    <Rectangle.Fill>
-                                        <RadialGradientBrush>
-                                            <GradientStop Color="{Binding OnDemandColor}"  Offset="0"/>
-                                            <GradientStop Color="{Binding OnDemandColorTransparent}" Offset="1"/>
-                                        </RadialGradientBrush>
-                                    </Rectangle.Fill>
-                                </Rectangle>
+                                    <Rectangle Width="{Binding Rectangle.Width}" Height="{Binding Rectangle.Height}">
+                                        <Rectangle.Fill>
+                                            <RadialGradientBrush>
+                                                <GradientStop Color="{Binding OnDemandColor}"  Offset="0"/>
+                                                <GradientStop Color="{Binding OnDemandColorTransparent}" Offset="1"/>
+                                            </RadialGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
                                     <Rectangle Visibility="{Binding IsFirst, Converter={StaticResource booleanToVisibilityConverter}}" Fill="Red"
-                                               Width="{Binding Rectangle.Width}" 
+                                               Width="{Binding Rectangle.Width}"
                                                Height="{Binding Rectangle.Height}" />
 
                                 </Grid>

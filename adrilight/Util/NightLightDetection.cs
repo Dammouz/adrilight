@@ -1,15 +1,15 @@
-﻿using adrilight.ViewModel;
-using Microsoft.Win32;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using adrilight.ViewModel;
 using Microsoft.ML;
 using Microsoft.ML.Data;
+using Microsoft.Win32;
+using NLog;
 
 namespace adrilight.Util
 {
@@ -45,7 +45,10 @@ namespace adrilight.Util
         {
             _cancellationTokenSource.Cancel();
 
-            if (_actingTask == null || _actingTask.IsCompleted) return;
+            if (_actingTask == null || _actingTask.IsCompleted)
+            {
+                return;
+            }
 
             _actingTask.Wait();
         }
@@ -62,7 +65,7 @@ namespace adrilight.Util
             }
             catch (OperationCanceledException)
             {
-                //expected!
+                // Expected!
                 return;
             }
         }
@@ -96,7 +99,6 @@ namespace adrilight.Util
             }
         }
 
-
         private RegistryKey _stateKeyWin10 = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\Cache\DefaultAccount\$$windows.data.bluelightreduction.bluelightreductionstate\Current", false);
         private RegistryKey _stateKeyInsider = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate", false);
 
@@ -112,18 +114,21 @@ namespace adrilight.Util
             {
                 var data = (byte[])(_stateKeyInsider ?? _stateKeyWin10).GetValue("Data");
 
-                if(data == null)
+                if (data == null)
                 {
                     const string msg = "could not read or find any data for the night light mode in the registry.";
                     _log.Error(msg);
                     throw new Exception(msg);
                 }
 
-                if(_lastData != null && data.SequenceEqual(_lastData))
+                if (_lastData != null && data.SequenceEqual(_lastData))
                 {
                     return _lastResult;
                 }
-                if (_log.IsDebugEnabled) _log.Debug("read regval: " + data.Select(b => b.ToString()).Aggregate((s1, s2) => s1 + "," + s2));
+                if (_log.IsDebugEnabled)
+                {
+                    _log.Debug("read regval: " + data.Select(b => b.ToString()).Aggregate((s1, s2) => s1 + "," + s2));
+                }
 
                 var stateString = data.Select(b => b.ToString()).Aggregate((s1, s2) => s1 + "," + s2);
 
@@ -161,22 +166,21 @@ namespace adrilight.Util
         }
     }
 
-
     class NightLightDataRow
     {
         public bool IsActive { get; }
 
-        //  [Microsoft.ML.Data.VectorType(43)]
+        //[Microsoft.ML.Data.VectorType(43)]
         public byte[] Data { get; }
 
         [Microsoft.ML.Data.VectorType(35)]
-        public float[] Data2 {
+        public float[] Data2
+        {
             get;
         }
 
         public NightLightDataRow()
         {
-
         }
 
         public NightLightDataRow(byte[] data, bool isActive)
@@ -191,6 +195,5 @@ namespace adrilight.Util
     {
         public float Probability { get; set; }
         public bool PredictedLabel { get; set; }
-
     }
 }

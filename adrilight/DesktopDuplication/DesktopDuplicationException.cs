@@ -6,10 +6,13 @@ namespace adrilight.DesktopDuplication
     public class DesktopDuplicationException : Exception
     {
         public DesktopDuplicationException(string message)
-            : base(message) { }
+            : base(message)
+        {
+        }
+
         public DesktopDuplicationException(string message, Exception innerException)
-                    : base(message, innerException) { }
-
-
+                    : base(message, innerException)
+        {
+        }
     }
 }
