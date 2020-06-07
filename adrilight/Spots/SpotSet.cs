@@ -79,15 +79,15 @@ namespace adrilight
                 throw new ArgumentOutOfRangeException(nameof(verticalStripCount));
             }
 
-            /* counting direction is clockwise:
+            /* Counting direction is clockwise:
              *
              *    0123
              *    9  4
              *    8765
              *
-             * number of expected entries = 2*horizontalStripCount + 2*verticalStripCount
+             * Number of expected entries = 2 * horizontalStripCount + 2 * verticalStripCount
              *
-             * ranges are
+             * Ranges are
              * 1..horizontalStripCount, 0  = top
              * horizontalStripCount+1, 1..verticalStripCount  = right
              * horizontalStripCount..1, verticalStripCount+1  = bottom
@@ -195,7 +195,7 @@ namespace adrilight
 
         private static void Mirror(ISpot[] spots, int startIndex, int length)
         {
-            var halfLength = (length / 2);
+            var halfLength = length / 2;
             var endIndex = startIndex + length - 1;
 
             for (var i = 0; i < halfLength; i++)

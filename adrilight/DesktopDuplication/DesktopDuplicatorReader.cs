@@ -323,8 +323,8 @@ namespace adrilight
             }
         }
 
-        private unsafe void GetAverageColorOfRectangularRegion(Rectangle spotRectangle, int stepy, int stepx, BitmapData bitmapData, out int sumR, out int sumG,
-            out int sumB, out int count)
+        private unsafe void GetAverageColorOfRectangularRegion(Rectangle spotRectangle, int stepy, int stepx, BitmapData bitmapData,
+            out int sumR, out int sumG, out int sumB, out int count)
         {
             sumR = 0;
             sumG = 0;

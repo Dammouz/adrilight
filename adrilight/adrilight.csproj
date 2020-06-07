@@ -302,7 +302,6 @@
     <EmbeddedResource Include="..\Tools\NighlightDetectionModelGenerator\NighlightDetectionModelGenerator\Data\NightLightDetectionModel.zip">
       <Link>Resources\NightLightDetectionModel.zip</Link>
     </EmbeddedResource>
-    <None Include=".editorconfig" />
     <None Include="adrilightApp.nuspec">
       <SubType>Designer</SubType>
     </None>

@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Drawing;
 using GalaSoft.MvvmLight;
-
 using Color = System.Windows.Media.Color;
 
 namespace adrilight

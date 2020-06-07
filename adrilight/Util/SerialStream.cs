@@ -134,15 +134,7 @@ namespace adrilight
                 var allBlack = true;
                 foreach (Spot spot in SpotSet.Spots)
                 {
-                    if (!UserSettings.SendRandomColors)
-                    {
-                        outputStream[counter++] = spot.Blue; // Blue
-                        outputStream[counter++] = spot.Green; // Green
-                        outputStream[counter++] = spot.Red; // Red
-
-                        allBlack = allBlack && spot.Red == 0 && spot.Green == 0 && spot.Blue == 0;
-                    }
-                    else
+                    if (UserSettings.SendRandomColors)
                     {
                         allBlack = false;
                         var n = frameCounter % 360;
@@ -150,6 +142,14 @@ namespace adrilight
                         outputStream[counter++] = c.B; // Blue
                         outputStream[counter++] = c.G; // Green
                         outputStream[counter++] = c.R; // Red
+                    }
+                    else
+                    {
+                        outputStream[counter++] = spot.Blue; // Blue
+                        outputStream[counter++] = spot.Green; // Green
+                        outputStream[counter++] = spot.Red; // Red
+
+                        allBlack = allBlack && spot.Red == 0 && spot.Green == 0 && spot.Blue == 0;
                     }
                 }
 
