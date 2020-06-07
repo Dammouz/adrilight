@@ -1,5 +1,4 @@
-﻿using adrilight.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -14,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using adrilight.ViewModel;
 
 namespace adrilight.View.SettingsWindowComponents
 {
@@ -30,8 +30,6 @@ namespace adrilight.View.SettingsWindowComponents
             SettingsViewModel = settingsViewModel ?? throw new ArgumentNullException(nameof(settingsViewModel));
             browser.Source = SettingsViewModel.WhatsNewUrl;
         }
-
-
 
         public class WhatsNewSetupSelectableViewPart : ISelectableViewPart
         {

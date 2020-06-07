@@ -183,7 +183,6 @@ namespace adrilight
             {
                 try
                 {
-                    const int baudRate = 1000000;
                     string openedComPort = null;
 
                     while (!cancellationToken.IsCancellationRequested)
@@ -194,7 +193,7 @@ namespace adrilight
                             serialPort?.Close();
 
                             serialPort = UserSettings.ComPort != "Fake Port"
-                                ? (ISerialPortWrapper)new WrappedSerialPort(new SerialPort(UserSettings.ComPort, baudRate))
+                                ? (ISerialPortWrapper)new WrappedSerialPort(new SerialPort(UserSettings.ComPort, UserSettings.BaudRate))
                                 : new FakeSerialPort();
 
                             try
@@ -233,7 +232,7 @@ namespace adrilight
                         // receiving over serial takes it time as well and the arduino does both tasks in sequence
                         // + 1 ms extra safe zone
                         var fastLedTime = (streamLength - _messagePreamble.Length - _messagePostamble.Length) / 3.0 * 0.030d;
-                        var serialTransferTime = streamLength * 10.0 * 1000.0 / baudRate;
+                        var serialTransferTime = streamLength * 10.0 * 1000.0 / UserSettings.BaudRate;
                         var minTimespan = (int)(fastLedTime + serialTransferTime) + 1;
 
                         Thread.Sleep(minTimespan);

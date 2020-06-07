@@ -1,5 +1,4 @@
-﻿using adrilight.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using adrilight.ViewModel;
 
 namespace adrilight.ui
 {
@@ -24,9 +24,7 @@ namespace adrilight.ui
         {
             InitializeComponent();
 
-
-            var settingsViewModel = DataContext as SettingsViewModel;
-            if (settingsViewModel != null)
+            if (DataContext is SettingsViewModel settingsViewModel)
             {
                 settingsViewModel.IsSettingsWindowOpen = true;
             }
@@ -34,8 +32,7 @@ namespace adrilight.ui
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            var settingsViewModel = DataContext as SettingsViewModel;
-            if (settingsViewModel != null)
+            if (DataContext is SettingsViewModel settingsViewModel)
             {
                 settingsViewModel.IsSettingsWindowOpen = false;
             }

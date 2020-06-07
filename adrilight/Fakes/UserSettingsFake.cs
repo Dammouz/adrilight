@@ -15,6 +15,7 @@ namespace adrilight.Fakes
         public int BorderDistanceX { get; set; } = 33;
         public int BorderDistanceY { get; set; } = 44;
         public string ComPort { get; set; } = "COM7";
+        public int BaudRate { get; set; } = 1000000;
         public DateTime? LastUpdateCheck { get; set; } = DateTime.Now;
         public int LedsPerSpot { get; set; } = 1;
         public bool MirrorX { get; set; } = true;

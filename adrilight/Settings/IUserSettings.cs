@@ -11,6 +11,7 @@ namespace adrilight
         int BorderDistanceX { get; set; }
         int BorderDistanceY { get; set; }
         string ComPort { get; set; }
+        int BaudRate { get; set; }
 
         bool MirrorX { get; set; }
         bool MirrorY { get; set; }

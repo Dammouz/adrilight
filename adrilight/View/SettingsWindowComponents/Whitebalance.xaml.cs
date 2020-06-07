@@ -1,5 +1,4 @@
-﻿using adrilight.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using adrilight.ViewModel;
 
 namespace adrilight.View.SettingsWindowComponents
 {
@@ -25,8 +25,6 @@ namespace adrilight.View.SettingsWindowComponents
         {
             InitializeComponent();
         }
-
-
 
         public class WhitebalanceSelectableViewPart : ISelectableViewPart
         {

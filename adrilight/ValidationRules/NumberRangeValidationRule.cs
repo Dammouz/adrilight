@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows.Controls;
 
 namespace adrilight.ValidationRules
 {
-    class NumberRangeValidationRule : ValidationRule
+    internal class NumberRangeValidationRule : ValidationRule
     {
         public int? Minimum { get; set; }
         public int? Maximum { get; set; }

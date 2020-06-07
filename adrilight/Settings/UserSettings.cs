@@ -17,6 +17,7 @@ namespace adrilight
         private int _borderDistanceX = 0;
         private int _borderDistanceY = 100;
         private string _comPort = null;
+        private int _baudRate = 916200; // For HC-06 AT+BAUDB OK921600
         private string _adrilightVersion = "2.0.7";
         private bool _mirrorX = false;
         private bool _mirrorY = false;
@@ -52,6 +53,7 @@ namespace adrilight
         public int BorderDistanceX { get => _borderDistanceX; set { Set(() => BorderDistanceX, ref _borderDistanceX, value); } }
         public int BorderDistanceY { get => _borderDistanceY; set { Set(() => BorderDistanceY, ref _borderDistanceY, value); } }
         public string ComPort { get => _comPort; set { Set(() => ComPort, ref _comPort, value); } }
+        public int BaudRate { get => _baudRate; set { Set(() => BaudRate, ref _baudRate, value); } }
 
         public string AdrilightVersion { get => _adrilightVersion; set { Set(() => AdrilightVersion, ref _adrilightVersion, value); } }
 

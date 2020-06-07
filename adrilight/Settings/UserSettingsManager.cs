@@ -72,6 +72,7 @@ namespace adrilight
                 ReadAndApply(xdoc, settings, "BORDER_DISTANCE_Y", s => s.BorderDistanceY);
                 ReadAndApply(xdoc, settings, "USE_LINEAR_LIGHTING", s => s.UseLinearLighting);
                 ReadAndApply(xdoc, settings, "COM_PORT", s => s.ComPort);
+                ReadAndApply(xdoc, settings, "BAUD_RATE", s => s.BaudRate);
                 ReadAndApply(xdoc, settings, "SATURATION_TRESHOLD", s => s.SaturationTreshold);
                 ReadAndApply(xdoc, settings, "MIRROR_X", s => s.MirrorX);
                 ReadAndApply(xdoc, settings, "MIRROR_Y", s => s.MirrorY);

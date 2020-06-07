@@ -120,7 +120,24 @@ namespace adrilight.ViewModel
         }
         public IUserSettings Settings { get; }
         public IContext Context { get; }
-        public IList<String> AvailableComPorts { get; } = SerialPort.GetPortNames().Concat(new[] { "Fake Port" }).ToList();
+        public IList<string> AvailableComPorts { get; } = SerialPort.GetPortNames().Concat(new[] { "Fake Port" }).ToList();
+        public IList<int> AvailableBaudRates { get; } = new List<int>
+        {
+            0,
+            1200,
+            2400,
+            4800,
+            9600,
+            19200,
+            38400,
+            57600,
+            115200,
+            230400,
+            460800,
+            921600,
+            1000000,
+            1382400,
+        };
 
         public IList<ISelectableViewPart> SelectableViewParts { get; }
 
@@ -186,8 +203,8 @@ namespace adrilight.ViewModel
                 else
                 {
                     // Next runs reuse the writable image
-                    Rectangle colorBitmapRectangle = new Rectangle(0, 0, image.Width, image.Height);
-                    Int32Rect colorBitmapInt32Rect = new Int32Rect(0, 0, PreviewImageSource.PixelWidth, PreviewImageSource.PixelHeight);
+                    var colorBitmapRectangle = new Rectangle(0, 0, image.Width, image.Height);
+                    var colorBitmapInt32Rect = new Int32Rect(0, 0, PreviewImageSource.PixelWidth, PreviewImageSource.PixelHeight);
 
                     BitmapData data = image.LockBits(colorBitmapRectangle, ImageLockMode.WriteOnly, image.PixelFormat);
 
@@ -286,14 +303,20 @@ namespace adrilight.ViewModel
             }
         }
 
-        public bool IsInDaylightLightMode { get { return !_isInNightLightMode; } }
+        public bool IsInDaylightLightMode
+        {
+            get
+            {
+                return !_isInNightLightMode;
+            }
+        }
 
         public IDictionary<AlternateWhiteBalanceModeEnum, string> AlternateWhiteBalanceModes { get; } =
             new SortedDictionary<AlternateWhiteBalanceModeEnum, string>()
             {
-                {AlternateWhiteBalanceModeEnum.On, "Forced On" },
-                {AlternateWhiteBalanceModeEnum.Auto, "Auto detect" },
-                {AlternateWhiteBalanceModeEnum.Off, "Forced Off" },
+                { AlternateWhiteBalanceModeEnum.On, "Forced On" },
+                { AlternateWhiteBalanceModeEnum.Auto, "Auto detect" },
+                { AlternateWhiteBalanceModeEnum.Off, "Forced Off" },
             };
     }
 }

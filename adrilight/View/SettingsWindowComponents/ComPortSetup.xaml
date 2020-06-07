@@ -12,7 +12,7 @@
         FontFamily="{StaticResource MaterialDesignFont}"
              xmlns:local="clr-namespace:adrilight.View.SettingsWindowComponents"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:validationRules="clr-namespace:adrilight.ViewModel.ValidationRules"
+             xmlns:validationRules="clr-namespace:adrilight.ValidationRules"
              mc:Ignorable="d"
              d:DesignHeight="391.45" d:DesignWidth="991.636">
     <UserControl.Resources>
@@ -46,6 +46,23 @@
                     </ComboBox>
                     <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" Margin="0 22 0 0" TextAlignment="Justify">
                         This is the COM-Port used for the communication with the arduino.
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Margin="8 24 8 8" >
+                    <TextBlock FontWeight="Bold">Serial baud rate</TextBlock>
+                    <ComboBox
+                        materialDesign:HintAssist.Hint="Serial baud rate"
+                        ItemsSource="{Binding AvailableBaudRates}">
+                        <ComboBox.SelectedValue>
+                            <Binding Path="Settings.BaudRate" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <validationRules:NumberRangeValidationRule Minimum="1" Maximum="10000000"  ValidatesOnTargetUpdated="True"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </ComboBox.SelectedValue>
+                    </ComboBox>
+                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" Margin="0 22 0 0" TextAlignment="Justify">
+                        This is the serial baud rate used for the communication with the arduino.
                     </TextBlock>
                 </StackPanel>
             </Grid>
