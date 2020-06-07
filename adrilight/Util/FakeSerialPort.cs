@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using NLog;
+﻿using NLog;
 
 namespace adrilight.Util
 {
-    class FakeSerialPort : ISerialPortWrapper
+    internal class FakeSerialPort : ISerialPortWrapper
     {
         private ILogger _log = LogManager.GetCurrentClassLogger();
 

@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Media;
 using adrilight.Util;
 using Newtonsoft.Json;
 using NLog;

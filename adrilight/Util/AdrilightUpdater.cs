@@ -1,21 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using adrilight.Resources;
-using Newtonsoft.Json;
 using NLog;
-using Semver;
 using Squirrel;
 
 namespace adrilight.Util
 {
-    class AdrilightUpdater
+    internal class AdrilightUpdater
     {
         private readonly ILogger _log = LogManager.GetCurrentClassLogger();
         private const string ADRILIGHT_RELEASES = "https://fabse.net/adrilight/Releases";

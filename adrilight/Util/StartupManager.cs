@@ -2,7 +2,7 @@
 using System.Security.Principal;
 using Microsoft.Win32;
 
-public class StartUpManager
+internal class StartUpManager
 {
     private const string ApplicationName = "adrilight";
 

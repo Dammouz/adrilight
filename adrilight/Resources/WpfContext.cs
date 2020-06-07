@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace adrilight.Resources
 {
-    class WpfContext : IContext
+    internal class WpfContext : IContext
     {
         private readonly Dispatcher _dispatcher;
 
@@ -21,7 +17,8 @@ namespace adrilight.Resources
             }
         }
 
-        public WpfContext() : this(Dispatcher.CurrentDispatcher)
+        public WpfContext()
+            : this(Dispatcher.CurrentDispatcher)
         {
         }
 

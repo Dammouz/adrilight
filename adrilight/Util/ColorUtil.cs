@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace adrilight.Util
 {
-    class ColorUtil
+    internal class ColorUtil
     {
         // Source: https://stackoverflow.com/a/18840768
         public static System.Drawing.Color FromAhsb(int alpha, float hue, float saturation, float brightness)

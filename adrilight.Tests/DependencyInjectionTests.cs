@@ -5,7 +5,7 @@ using Ninject;
 namespace adrilight.Tests
 {
     [TestClass]
-    public class DependencyInjectionTests
+    public sealed class DependencyInjectionTests
     {
         [TestMethod]
         public void DesignTimeCreation_Works()

@@ -4,14 +4,12 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Text;
-using System.Threading.Tasks;
 using MoreLinq;
 using NLog;
 
 namespace adrilight.Util
 {
-    sealed class FpsLogger : IDisposable
+    internal sealed class FpsLogger : IDisposable
     {
         private static ILogger _log = LogManager.GetCurrentClassLogger();
 

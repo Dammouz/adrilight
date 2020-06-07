@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using adrilight.Settings;
 
 namespace adrilight.Fakes
 {
-    class UserSettingsFake : IUserSettings
+    internal class UserSettingsFake : IUserSettings
     {
         public bool Autostart { get; set; } = true;
         public int ConfigFileVersion { get; set; } = 2;

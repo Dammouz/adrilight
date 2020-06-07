@@ -7,7 +7,7 @@ using Moq;
 namespace adrilight.Tests
 {
     [TestClass]
-    public class SpotsetTests
+    public sealed class SpotsetTests
     {
         [TestMethod]
         public void SimpleSwap_Works()

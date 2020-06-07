@@ -29,25 +29,29 @@ namespace adrilight.benchmarks
         [Benchmark]
         public void GetAverageColorOfRectangularRegionBenchmark()
         {
-            GetAverageColorOfRectangularRegion(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData, out int r, out int g, out int b, out int count);
+            GetAverageColorOfRectangularRegion(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData,
+                out int r, out int g, out int b, out int count);
         }
 
         [Benchmark]
         public void GetAverageColorOfRectangularRegionInlinedBenchmark()
         {
-            GetAverageColorOfRectangularRegion2(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData, out int r, out int g, out int b, out int count);
+            GetAverageColorOfRectangularRegion2(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData,
+                out int r, out int g, out int b, out int count);
         }
 
         [Benchmark]
         public void GetAverageColorOfRectangularRegionInlinedReducedLocalVarsBenchmark()
         {
-            GetAverageColorOfRectangularRegion2_5(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData, out int r, out int g, out int b, out int count);
+            GetAverageColorOfRectangularRegion2_5(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData,
+                out int r, out int g, out int b, out int count);
         }
 
         [Benchmark]
         public void GetAverageColorOfRectangularRegionRunningPointerBenchmark()
         {
-            GetAverageColorOfRectangularRegion3(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData, out int r, out int g, out int b, out int count);
+            GetAverageColorOfRectangularRegion3(new Rectangle(20, 30, 100, 100), 10, 10, _bitmapData,
+                out int r, out int g, out int b, out int count);
         }
 
         public void Dispose()
@@ -56,7 +60,8 @@ namespace adrilight.benchmarks
             _image = null;
         }
 
-        public static void GetAverageColorOfRectangularRegion(Rectangle spotRectangle, int stepy, int stepx, BitmapData bitmapData, out int sumR, out int sumG, out int sumB, out int count)
+        public static void GetAverageColorOfRectangularRegion(Rectangle spotRectangle, int stepy, int stepx, BitmapData bitmapData,
+            out int sumR, out int sumG, out int sumB, out int count)
         {
             sumR = 0;
             sumG = 0;
@@ -76,7 +81,8 @@ namespace adrilight.benchmarks
             }
         }
 
-        public unsafe static void GetAverageColorOfRectangularRegion2(Rectangle spotRectangle, int stepy, int stepx, BitmapData bitmapData, out int sumR, out int sumG, out int sumB, out int count)
+        public unsafe static void GetAverageColorOfRectangularRegion2(Rectangle spotRectangle, int stepy, int stepx, BitmapData bitmapData,
+            out int sumR, out int sumG, out int sumB, out int count)
         {
             sumR = 0;
             sumG = 0;
@@ -106,7 +112,8 @@ namespace adrilight.benchmarks
             }
         }
 
-        public unsafe static void GetAverageColorOfRectangularRegion2_5(Rectangle spotRectangle, int stepy, int stepx, BitmapData bitmapData, out int sumR, out int sumG, out int sumB, out int count)
+        public unsafe static void GetAverageColorOfRectangularRegion2_5(Rectangle spotRectangle, int stepy, int stepx, BitmapData bitmapData,
+            out int sumR, out int sumG, out int sumB, out int count)
         {
             sumR = 0;
             sumG = 0;
@@ -127,7 +134,8 @@ namespace adrilight.benchmarks
             }
         }
 
-        public unsafe static void GetAverageColorOfRectangularRegion3(Rectangle spotRectangle, int stepy, int stepx, BitmapData bitmapData, out int sumR, out int sumG, out int sumB, out int count)
+        public unsafe static void GetAverageColorOfRectangularRegion3(Rectangle spotRectangle, int stepy, int stepx, BitmapData bitmapData,
+            out int sumR, out int sumG, out int sumB, out int count)
         {
             sumR = 0;
             sumG = 0;

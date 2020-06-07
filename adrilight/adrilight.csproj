@@ -15,6 +15,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -27,12 +28,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -314,7 +311,9 @@
     <Compile Include="Extensions\RawRectangleExtensions.cs" />
     <Compile Include="Resources\IContext.cs" />
     <Compile Include="Resources\WpfContext.cs" />
-    <Compile Include="Util\NightLightDetection.cs" />
+    <Compile Include="Util\NightLightDetection\NightLightDataRow.cs" />
+    <Compile Include="Util\NightLightDetection\NightLightDetection.cs" />
+    <Compile Include="Util\NightLightDetection\NightLightState.cs" />
     <Compile Include="Util\SerialStream.cs" />
     <Compile Include="Spots\Spot.cs" />
     <Compile Include="Spots\SpotSet.cs" />
@@ -322,7 +321,7 @@
     <Compile Include="Util\StartupManager.cs" />
     <Compile Include="Util\AdrilightUpdater.cs" />
     <Compile Include="Util\WrappedSerialPort.cs" />
-	<Compile Include="ValidationRules\NotEmptyValidationRule.cs" />
+    <Compile Include="ValidationRules\NotEmptyValidationRule.cs" />
     <Compile Include="ValidationRules\NumberRangeValidationRule.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="View\SettingsWindowComponents\WhatsNew.xaml.cs">

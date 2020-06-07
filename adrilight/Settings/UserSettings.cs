@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using adrilight.Settings;
 using GalaSoft.MvvmLight;
-using Newtonsoft.Json;
 
 namespace adrilight
 {

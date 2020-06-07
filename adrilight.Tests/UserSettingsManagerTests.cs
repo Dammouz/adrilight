@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace adrilight.Tests
 {
     [TestClass]
-    public class UserSettingsManagerTests
+    public sealed class UserSettingsManagerTests
     {
         [TestMethod]
         public void Save_and_Load_work()

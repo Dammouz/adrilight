@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
+using adrilight.Extensions;
+using adrilight.Util;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using adrilight.Extensions;
-using adrilight.Util;
-
 using Device = SharpDX.Direct3D11.Device;
 using MapFlags = SharpDX.Direct3D11.MapFlags;
 using Rectangle = SharpDX.Mathematics.Interop.RawRectangle;
@@ -18,7 +15,7 @@ namespace adrilight.DesktopDuplication
     /// <summary>
     /// Provides access to frame-by-frame updates of a particular desktop (i.e. one monitor), with image and cursor information.
     /// </summary>
-    public class DesktopDuplicator : IDisposable
+    internal class DesktopDuplicator : IDisposable
     {
         private readonly Device _device;
         private OutputDescription _outputDescription;
@@ -175,7 +172,7 @@ namespace adrilight.DesktopDuplication
             // Generates the mipmap of the screen
             _device.ImmediateContext.GenerateMips(_smallerTextureView);
 
-            // Copy the mipmap 1 of smallerTexture (size/2) to the staging texture
+            // Copy the mipmap 1 of smallerTexture (size / 2) to the staging texture
             _device.ImmediateContext.CopySubresourceRegion(_smallerTexture, mipMapLevel, null, _stagingTexture, 0);
 
             desktopResource.Dispose(); // Perf?

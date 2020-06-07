@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace adrilight.Util
 {
-    class WrappedSerialPort : ISerialPortWrapper
+    internal class WrappedSerialPort : ISerialPortWrapper
     {
         public WrappedSerialPort(SerialPort serialPort)
         {

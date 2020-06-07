@@ -23,6 +23,7 @@ using System.Windows.Threading;
 using Ninject.Extensions.Conventions;
 using adrilight.Resources;
 using adrilight.Util;
+using adrilight.Util.NightLightDetection;
 
 namespace adrilight
 {
@@ -42,9 +43,11 @@ namespace adrilight
             if (!IsSupported())
             {
                 var os = Environment.OSVersion;
-                MessageBox.Show($"Your Windows version is not supported by adrilight, sorry!\n\n"
-                    + $"Platform={os.Platform}\nVersion={os.Version}\nService Pack={os.ServicePack}\n\n\n"
-                    + "You should consider upgrading to Windows 10. Adrilight should run on Windows 8 and later but is only actively tested and developed for Windows 10.",
+                MessageBox.Show($"Your Windows version is not supported by adrilight, sorry!{Environment.NewLine}{Environment.NewLine}" +
+                    $"Platform={os.Platform}{Environment.NewLine}" +
+                    $"Version={os.Version}{Environment.NewLine}" +
+                    $"Service Pack={os.ServicePack}{Environment.NewLine}{Environment.NewLine}{Environment.NewLine}" +
+                    $"You should consider upgrading to Windows 10. Adrilight should run on Windows 8 and later but is only actively tested and developed for Windows 10.",
                     "Your Windows version is too old!", MessageBoxButton.OK);
 
                 Shutdown();
@@ -71,7 +74,7 @@ namespace adrilight
             _log.Debug($"adrilight {VersionNumber}: Main() started.");
             kernel = SetupDependencyInjection(false);
 
-            this.Resources["Locator"] = new ViewModelLocator(kernel);
+            Resources["Locator"] = new ViewModelLocator(kernel);
 
 
             UserSettings = kernel.Get<IUserSettings>();
@@ -183,7 +186,10 @@ namespace adrilight
         private void SetupDebugLogging()
         {
             var config = new LoggingConfiguration();
-            var debuggerTarget = new DebuggerTarget() { Layout = "${processtime} ${message:exceptionSeparator=\n\t:withException=true}" };
+            var debuggerTarget = new DebuggerTarget()
+            {
+                Layout = "${processtime} ${message:exceptionSeparator=\n\t:withException=true}"
+            };
             config.AddTarget("debugger", debuggerTarget);
             config.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, debuggerTarget));
 

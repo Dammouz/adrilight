@@ -3,15 +3,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-using NLog;
-using Polly;
 using adrilight.DesktopDuplication;
 using adrilight.Settings;
 using adrilight.ViewModel;
+using NLog;
+using Polly;
 
 namespace adrilight
 {

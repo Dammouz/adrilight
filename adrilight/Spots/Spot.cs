@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Media;
 using GalaSoft.MvvmLight;
 
 using Color = System.Windows.Media.Color;
@@ -9,7 +8,7 @@ using Color = System.Windows.Media.Color;
 namespace adrilight
 {
     [DebuggerDisplay("Spot: Rectangle={Rectangle}, Color={Red},{Green},{Blue}")]
-    sealed class Spot : ViewModelBase, IDisposable, ISpot
+    internal sealed class Spot : ViewModelBase, IDisposable, ISpot
     {
 
         public Spot(int top, int left, int width, int height)

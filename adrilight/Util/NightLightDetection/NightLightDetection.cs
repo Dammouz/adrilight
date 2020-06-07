@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using adrilight.ViewModel;
 using Microsoft.ML;
-using Microsoft.ML.Data;
 using Microsoft.Win32;
 using NLog;
 
-namespace adrilight.Util
+namespace adrilight.Util.NightLightDetection
 {
-    class NightLightDetection
+    internal class NightLightDetection
     {
         private readonly ILogger _log = LogManager.GetCurrentClassLogger();
 
@@ -164,36 +161,5 @@ namespace adrilight.Util
                 throw;
             }
         }
-    }
-
-    class NightLightDataRow
-    {
-        public bool IsActive { get; }
-
-        //[Microsoft.ML.Data.VectorType(43)]
-        public byte[] Data { get; }
-
-        [Microsoft.ML.Data.VectorType(35)]
-        public float[] Data2
-        {
-            get;
-        }
-
-        public NightLightDataRow()
-        {
-        }
-
-        public NightLightDataRow(byte[] data, bool isActive)
-        {
-            Data = data;
-            Data2 = data.Concat(Enumerable.Repeat((byte)0, Math.Max(0, 35 - data.Length))).Select(d => (float)d).Take(35).ToArray();
-            IsActive = isActive;
-        }
-    }
-
-    class NightLightState
-    {
-        public float Probability { get; set; }
-        public bool PredictedLabel { get; set; }
     }
 }

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace adrilight.Extensions
 {
-    static class MathExtensions
+    internal static class MathExtensions
     {
         public static T Clamp<T>(this T val, T min, T max) where T : IComparable<T>
         {
