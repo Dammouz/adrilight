@@ -4,6 +4,7 @@
 #define DATA_PIN  42
 #define CLOCK_PIN 48
 #define BRIGHTNESS 200 // Range is 0..255 with 255 beeing the MAX brightness
+#define SERIAL_BAUD_RATE 916200//1000000
 
 // --------------------------------------------------------------------------------------------
 // NO CHANGE REQUIRED BELOW THIS LINE
@@ -30,6 +31,8 @@ uint8_t current_preamble_position = 0;
 
 unsigned long last_serial_available = -1L;
 
+// For my test, I use a physical 60 leds / m strip
+// but I simulate a 30 leds / m
 CRGB leds[NUM_LEDS * 2];
 CRGB ledsTemp[NUM_LEDS];
 byte buffer[RGB_BYTES];
@@ -41,7 +44,7 @@ uint8_t startIndex = 0;
 
 void setup()
 {
-    Serial.begin(1000000);
+    Serial.begin(SERIAL_BAUD_RATE);
     FastLED.clear(true);
     //FastLED.addLeds<WS2812B, LED_DATA_PIN, GRB>(leds, NUM_LEDS);
     FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS * 2);
